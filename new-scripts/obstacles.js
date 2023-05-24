@@ -27,10 +27,10 @@ export class Rectangular extends Obstacle {
         this.rotation = rotation * Math.PI / 180;
         this.z_scale = z_scale;
 
-        let v1_prev = vec3(this.position[0] - width + 1, this.position[1] + height - 1, 0);
-        let v2_prev = vec3(this.position[0] + width - 1, this.position[1] + height - 1, 0);
-        let v3_prev = vec3(this.position[0] + width - 1, this.position[1] - height + 1, 0);
-        let v4_prev = vec3(this.position[0] - width + 1, this.position[1] - height + 1, 0);
+        let v1_prev = vec3(this.position[0] - width - 1, this.position[1] + height + 1, 0);
+        let v2_prev = vec3(this.position[0] + width + 1, this.position[1] + height + 1, 0);
+        let v3_prev = vec3(this.position[0] + width + 1, this.position[1] - height - 1, 0);
+        let v4_prev = vec3(this.position[0] - width - 1, this.position[1] - height - 1, 0);
         const rotation_matrix = Mat4.rotation(this.rotation, 0, 0, 1);
         this.vertices.push(rotation_matrix.times(v1_prev));
         this.vertices.push(rotation_matrix.times(v2_prev));

@@ -53,13 +53,13 @@ export class Assignment3 extends Scene {
 
         this.top_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(0, 21, 0), 1, 30, 1, 0, 0, 1);
 
-        this.left_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(-31, 0, 0), 1, 1, 20, 0, 0, 1);
+        this.left_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(-31, 0, 0), 1, 1, 22, 0, 0, 1);
 
-        this.right_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(31, 0, 0), 1, 1, 20, 0, 0, 1);
+        this.right_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(31, 0, 0), 1, 1, 22, 0, 0, 1);
 
-        this.slanted = new Rectangular(this.shapes.cube, this.materials.test, vec3(-5, -10, 0), 1, 20, 1, 0, -30, 1);
+        this.slanted = new Rectangular(this.shapes.cube, this.materials.test, vec3(-5, -10, 0), 1, 10, 1, 0, -30, 1);
 
-        this.obstacles = [this.background, this.bot_wall,this.top_wall, this.left_wall, this.right_wall, this.slanted];
+        this.obstacles = [this.bot_wall,this.top_wall, this.left_wall, this.right_wall, this.slanted];
     }
 
     make_control_panel() {
@@ -117,6 +117,9 @@ export class Assignment3 extends Scene {
         this.left_wall.render(context, program_state);
         this.right_wall.render(context, program_state);
         this.slanted.render(context, program_state);
+
+        model_transform = model_transform.times(Mat4.translation(29, -19, 5));
+        this.shapes.circle.draw(context, program_state, model_transform, this.materials.test);
 
         //this.right_floor.render(context, program_state);
     }
