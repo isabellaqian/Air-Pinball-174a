@@ -11,7 +11,7 @@ export class Ball {
         this.material = material;
         this.position = position;
         this.velocity = velocity;
-        this.gravity = -300; //-300
+        this.gravity = -30; //-300
         this.bounciness = .95;
         this.scene = scene;
 
@@ -40,7 +40,7 @@ export class Ball {
         for (let i = 0; i < this.scene.obstacles.length; i++) {
             this.handle_obstacle_collision(this.scene.obstacles[i]);
         }
-        this.handle_boundary_collision(8, 6);
+        //this.handle_boundary_collision(8, 6);
     }
 
     collide(normal, bounciness, collision_point) {
@@ -98,7 +98,7 @@ export class Ball {
             collision_point = this.PhysicsCalculations.findIntersectionPoint(this.travel_segment_start, this.travel_segment_end, obstacle.vertices[i], obstacle.vertices[i + 1]);
 
             if (collision_point !== null) {
-                //this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[i + 1]),1, collision_point);
+                this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[i + 1]),1, collision_point);
             }
         }
     }
