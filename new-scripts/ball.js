@@ -11,7 +11,7 @@ export class Ball {
         this.material = material;
         this.position = position;
         this.velocity = velocity;
-        this.gravity = -10; //-300
+        this.gravity = -300; //-300
         this.bounciness = .95;
         this.scene = scene;
 
@@ -64,12 +64,21 @@ export class Ball {
 
         let normal_component = vec3(normal_component_magnitude * normal[0], normal_component_magnitude * normal[1], 0);
 
-        let tangent_component_mag = this.PhysicsCalculations.dot_product(this.velocity, tangent)
+        //supposed to allow for sliding
+        /*if (this.PhysicsCalculations.sqr_magnitude(normal_component) < this.dt * 2000){
+            normal_component[0] = 0;
+            normal_component[1] = 0;
+        }*/
+
+        let tangent_component_magnitude = this.PhysicsCalculations.dot_product(this.velocity, tangent)
             / this.PhysicsCalculations.sqr_magnitude(tangent);
 
-        let tangent_component = vec3(tangent_component_mag * tangent[0], tangent_component_mag * tangent[1], 0);
+        let tangent_component = vec3(tangent_component_magnitude * tangent[0], tangent_component_magnitude * tangent[1], 0);
 
-        this.velocity = vec3((-normal_component[0] + tangent_component[0]) * bounciness * this.bounciness, (-normal_component[1] + tangent_component[1]) * bounciness * this.bounciness, 0);
+        this.velocity = vec3(normal_component[0] * -bounciness * this.bounciness + tangent_component[0],
+            normal_component[1] * -bounciness * this.bounciness + tangent_component[1], 0);
+        //this.velocity = vec3((-normal_component[0] + tangent_component[0]) * bounciness * this.bounciness,
+        //    (-normal_component[1] + tangent_component[1]) * bounciness * this.bounciness, 0);
 
         return;
 
@@ -84,18 +93,12 @@ export class Ball {
     handle_obstacle_collision(obstacle) {
         let collision_point = null;
 
-        console.log("checking: \n" + obstacle.vertices[0] +
-            "\n" + obstacle.vertices[1] +
-            "\n" + obstacle.vertices[2] +
-            "\n" + obstacle.vertices[3]
-        );
-
         for (let i = 0; i < obstacle.vertices.length - 1; i++)
         {
             collision_point = this.PhysicsCalculations.findIntersectionPoint(this.travel_segment_start, this.travel_segment_end, obstacle.vertices[i], obstacle.vertices[i + 1]);
 
             if (collision_point !== null) {
-                this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[i + 1]),1, collision_point);
+                //this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[i + 1]),1, collision_point);
             }
         }
     }
@@ -119,7 +122,7 @@ export class Ball {
             collision_point = this.PhysicsCalculations.findIntersectionPoint(this.travel_segment_start, this.travel_segment_end, wall_points[i], wall_points[i + 1]);
 
             if (collision_point !== null){
-                //this.collide(this.PhysicsCalculations.normal_of_line_segment(wall_points[i], wall_points[i + 1]),1, collision_point);
+                this.collide(this.PhysicsCalculations.normal_of_line_segment(wall_points[i], wall_points[i + 1]),1, collision_point);
             }
         }
     }
