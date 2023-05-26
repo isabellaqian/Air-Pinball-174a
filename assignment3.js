@@ -43,7 +43,7 @@ export class Assignment3 extends Scene {
       test: new Material(new defs.Phong_Shader(), {
         ambient: 0.4,
         diffusivity: 0.5,
-        specularity: 0.9,
+        specularity: 0,
         color: hex_color("#b3abff"),
       }),
       ring: new Material(new Ring_Shader()),
@@ -67,6 +67,8 @@ export class Assignment3 extends Scene {
         diffusivity: 1,
         color: hex_color("#ff0000"),
       }),
+        obstacle: new Material(new defs.Phong_Shader(),
+            {ambient: 0.4, diffusivity: 1, specularity: 0, color: hex_color("#0000FF")}),
     };
 
     this.initial_camera_location = Mat4.look_at(
@@ -79,10 +81,10 @@ export class Assignment3 extends Scene {
     this.Ball = new Ball(
       this.shapes.sphere,
       this.materials.ball,
-      //vec3(0, 6, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this);
-      vec3(0, 6, 0),
-      vec3(0, 0, 0),
-      this
+      vec3(0, 10, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this
+      //vec3(0, 6, 0),
+      //vec3(0, 0, 0),
+
     );
 
     this.circular_bouncer = new Cylindrical(
@@ -108,7 +110,7 @@ export class Assignment3 extends Scene {
       this.shapes.cube,
       this.materials.test,
       vec3(0, -21, 0),
-      3,
+      1.2,
       30,
       1,
       0,
@@ -120,7 +122,7 @@ export class Assignment3 extends Scene {
       this.shapes.cube,
       this.materials.test,
       vec3(0, 21, 0),
-      1,
+      0.5,
       30,
       1,
       0,
@@ -152,23 +154,40 @@ export class Assignment3 extends Scene {
       1
     );
 
-    this.slanted = new Rectangular(
+    this.obstacle1 = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
-      vec3(-5, -10, 0),
+      this.materials.obstacle,
+      vec3(-10, 10, 0),
       1,
-      10,
-      5,
+      3,
+      1,
       0,
       -30,
       1
     );
+
+    this.obstacle2 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+        vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1);
+
+      this.obstacle3 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+          vec3(15, 15, 0), 1, 3, 1, 0, 60, 1);
+
+      this.obstacle4 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+          vec3(10, 0, 0), 1, 3, 1, 0, -60, 1);
+
+      this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+          vec3(20, -10, 0), 1, 3, 1, 0, 50, 1);
+
     this.obstacles = [
       this.bot_wall,
       this.top_wall,
       this.left_wall,
       this.right_wall,
-      this.slanted,
+      this.obstacle1,
+        this.obstacle2,
+        this.obstacle3,
+        this.obstacle4,
+        this.obstacle5
     ];
 
     console.log(
@@ -269,7 +288,11 @@ export class Assignment3 extends Scene {
     this.top_wall.render(context, program_state);
     this.left_wall.render(context, program_state);
     this.right_wall.render(context, program_state);
-    this.slanted.render(context, program_state);
+    this.obstacle1.render(context, program_state);
+      this.obstacle2.render(context, program_state);
+      this.obstacle3.render(context, program_state);
+      this.obstacle4.render(context, program_state);
+      this.obstacle5.render(context, program_state);
 
     model_transform = model_transform.times(Mat4.translation(29, -19, 5));
     this.shapes.circle.draw(

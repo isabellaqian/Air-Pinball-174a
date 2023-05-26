@@ -32,9 +32,9 @@ export class Ball {
         this.update_position();
 
         this.render(context, program_state);
-        for (let i = 0; i < this.debug_points.length; i++) {
+        /*for (let i = 0; i < this.debug_points.length; i++) {
             this.debug_points[i].render(context, program_state);
-        }
+        }*/
     }
 
     update_position() {

@@ -68,9 +68,9 @@ export class Rectangular extends Obstacle {
             .times(Mat4.rotation(this.rotation,0,0,1))
             .times(Mat4.scale(this.width, this.height, this.z_scale)), this.material);
 
-        for (let i = 0; i < this.debug_points.length; i++) {
+        /*for (let i = 0; i < this.debug_points.length; i++) {
             this.debug_points[i].render(context, program_state);
-        }
+        }*/
     }
 }
 
