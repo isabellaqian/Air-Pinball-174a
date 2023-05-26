@@ -1,5 +1,6 @@
 import {defs, tiny} from '../examples/common.js';
 import {PhysicsCalculations} from "./physics-calculations.js";
+import {Debug_Point} from "./visual_debugger.js";
 
 const {
     Vector, Vector3, vec, vec3, vec4, color, hex_color, Shader, Matrix, Mat4, Light, Shape, Material, Scene,
@@ -20,6 +21,7 @@ export class Ball {
 
         this.dt = 0;
 
+        this.debug_points = [];
         this.PhysicsCalculations = new PhysicsCalculations();
     }
 
@@ -30,6 +32,9 @@ export class Ball {
         this.update_position();
 
         this.render(context, program_state);
+        for (let i = 0; i < this.debug_points.length; i++) {
+            this.debug_points[i].render(context, program_state);
+        }
     }
 
     update_position() {
@@ -38,9 +43,9 @@ export class Ball {
         this.travel_segment_start = this.position;
 
         for (let i = 0; i < this.scene.obstacles.length; i++) {
-            //this.handle_obstacle_collision(this.scene.obstacles[i]);
+            this.handle_obstacle_collision(this.scene.obstacles[i]);
         }
-        this.handle_boundary_collision(8, 6);
+        //this.handle_boundary_collision(8, 6);
     }
 
     collide(normal, bounciness, collision_point) {
@@ -85,13 +90,20 @@ export class Ball {
 
     handle_obstacle_collision(obstacle) {
         let collision_point = null;
+        let second_vertex_index = 0;
 
-        for (let i = 0; i < obstacle.vertices.length - 1; i++)
+        for (let i = 0; i < obstacle.vertices.length; i++)
         {
-            collision_point = this.PhysicsCalculations.findIntersectionPoint(this.travel_segment_start, this.travel_segment_end, obstacle.vertices[i], obstacle.vertices[i + 1]);
+            second_vertex_index = i + 1;
+            if (second_vertex_index === obstacle.vertices.length) {
+                second_vertex_index = 0;
+            }
+
+            collision_point = this.PhysicsCalculations.findIntersectionPoint(this.travel_segment_start, this.travel_segment_end, obstacle.vertices[i], obstacle.vertices[second_vertex_index]);
 
             if (collision_point !== null) {
-                this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[i + 1]),1, collision_point);
+                this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),1, collision_point);
+                this.debug_points.push(new Debug_Point(this.material, collision_point));
             }
         }
     }

@@ -37,6 +37,8 @@ export class Assignment3 extends Scene {
                 {ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#888888")}),
             circular_bouncer: new Material(new Gouraud_Shader(),
                 {ambient: 0.4, diffusivity: 1, specularity: .5, color: hex_color("#ff0000")}),
+            debug_material: new Material(new Gouraud_Shader(),
+                {ambient: 1, diffusivity: 1, color: hex_color("#ff0000")}),
         }
 
         this.initial_camera_location = Mat4.look_at(vec3(0, -10, 60), vec3(0, 0, 0), vec3(0, 1, 0));
@@ -58,8 +60,7 @@ export class Assignment3 extends Scene {
 
         this.right_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(31, 0, 0), 1, 1, 22, 0, 0, 1);
 
-        this.slanted = new Rectangular(this.shapes.cube, this.materials.test, vec3(-5, -10, 0), 1, 10, 1, 0, -30, 1);
-
+        this.slanted = new Rectangular(this.shapes.cube, this.materials.test, vec3(-5, -10, 0), 1, 10, 5, 0, 0, 1);
         this.obstacles = [this.bot_wall,this.top_wall, this.left_wall, this.right_wall, this.slanted];
 
 
@@ -125,11 +126,6 @@ export class Assignment3 extends Scene {
 
         model_transform = model_transform.times(Mat4.translation(29, -19, 5));
         this.shapes.circle.draw(context, program_state, model_transform, this.materials.test);
-
-        for (let i = 0; i < this.scene.debug_points.length; i++)
-        {
-            this.debug_points[i].render(context, program_state);
-        }
     }
 }
 

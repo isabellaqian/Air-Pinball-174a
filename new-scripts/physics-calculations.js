@@ -6,6 +6,10 @@ const {
 
 export class PhysicsCalculations {
 
+    findIntersectionPoint1(line_1_begin, line_1_end, line_2_begin, line_2_end) {
+        let det = ;
+    }
+
     findIntersectionPoint(line_1_begin, line_1_end, line_2_begin, line_2_end) {
         const x1 = line_1_begin[0];
         const y1 = line_1_begin[1];
@@ -73,7 +77,8 @@ export class PhysicsCalculations {
     }
 
     normal_of_line_segment(start, end) {
-        return vec3(end[1] - start[1], start[0] - end[0], 0);
+        return vec3(start[1] - end[1], end[0] - start[0], 0);
+        //return vec3(end[1] - start[1], start[0] - end[0], 0);
     }
 
     dot_product(vector1, vector2) {

@@ -8,7 +8,7 @@ export class Debug_Point {
     constructor(material, position) {
         this.material = material;
         this.position = position;
-        this.shape = new defs.Cube();
+        this.shape = new defs.Subdivision_Sphere(4);
 
         this.vertices = [];
     }

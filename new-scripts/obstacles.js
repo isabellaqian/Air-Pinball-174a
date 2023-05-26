@@ -1,19 +1,19 @@
 import {defs, tiny} from '../examples/common.js';
-import {Debug_Point} from "../new-scripts/visual_debugger.js";
+import {Debug_Point} from "./visual_debugger.js";
 
 const {
     Vector, Vector3, vec, vec3, vec4, color, hex_color, Shader, Matrix, Mat4, Light, Shape, Material, Scene,
 } = tiny;
 
 export class Obstacle {
-    constructor(shape, material, position, bounciness, scene) {
+    constructor(shape, material, position, bounciness) {
         this.bounciness = bounciness;
         this.position = position;
         this.shape = shape;
         this.material = material;
-        this.scene = scene;
 
         this.vertices = [];
+        this.debug_points = [];
     }
     getVertices() {
         return this.vertices;
@@ -40,8 +40,11 @@ export class Rectangular extends Obstacle {
         this.vertices.push(rotation_matrix.times(v3_prev));
         this.vertices.push(rotation_matrix.times(v4_prev));
 
+        let colors = [hex_color("#EE4B2B"), hex_color("#eec12b"), hex_color("#3fee2b"), hex_color("#2b45ee")];
+
         for (let i = 0; i < this.vertices.length; i++) {
-            this.scene.debug_points.push(new Debug_Point(this.material, this.vertices[i]))
+            //override color to red
+            this.debug_points.push(new Debug_Point(this.material.override({color: colors[i]}), this.vertices[i]))
         }
 
         console.log("rotated vertices: ", this.vertices);
@@ -51,6 +54,10 @@ export class Rectangular extends Obstacle {
         this.shape.draw(context, program_state, Mat4.identity().times(Mat4.translation(this.position[0],this.position[1], this.depth))
             .times(Mat4.rotation(this.rotation,0,0,1))
             .times(Mat4.scale(this.width, this.height, this.z_scale)), this.material);
+
+        for (let i = 0; i < this.debug_points.length; i++) {
+            this.debug_points[i].render(context, program_state);
+        }
     }
 }
 
@@ -66,6 +73,12 @@ export class Rectangular1 extends Obstacle //i have no idea how the other Rectan
         let radius_offset = 1;
 
         this.vertices.push(this.position[0] - width - radius_offset, this.position[1] + height + radius_offset, 0);
+    }
+
+    render(context, program_state) {
+        this.shape.draw(context, program_state, Mat4.identity().times(Mat4.translation(this.position[0],this.position[1], this.depth))
+            .times(Mat4.rotation(this.rotation,0,0,1))
+            .times(Mat4.scale(this.width, this.height, this.z_scale)), this.material);
     }
 }
 
