@@ -12,7 +12,7 @@ export class Ball {
         this.material = material;
         this.position = position;
         this.velocity = velocity;
-        this.gravity = -50; //-300
+        this.gravity = -300; //-300
         this.bounciness = .95;
         this.scene = scene;
 
@@ -39,8 +39,8 @@ export class Ball {
 
     update_position() {
         this.travel_segment_start = this.position;
-        this.position = this.position.plus(this.velocity.times(this.dt));
-        this.travel_segment_start = this.position;
+        this.position = this.PhysicsCalculations.addVectors(this.position, this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, this.dt));
+        this.travel_segment_end = this.position;
 
         for (let i = 0; i < this.scene.obstacles.length; i++) {
             this.handle_obstacle_collision(this.scene.obstacles[i]);
@@ -50,14 +50,16 @@ export class Ball {
 
     collide(normal, bounciness, collision_point) {
 
-        let travel_proportion =
-            this.PhysicsCalculations.magnitude(vec3(this.travel_segment_start[0] - collision_point[0], this.travel_segment_start[1] - collision_point[1], 0))
-            / this.PhysicsCalculations.magnitude(vec3(this.travel_segment_start[0] - this.travel_segment_end[0], this.travel_segment_start[1] - this.travel_segment_end[1], 0));
-
-        this.dt = this.dt * (1 - travel_proportion);
+        //used for continuous collision detection (call recursively until no collision)
+        // let travel_proportion =
+        //     this.PhysicsCalculations.magnitude(vec3(this.travel_segment_start[0] - collision_point[0], this.travel_segment_start[1] - collision_point[1], 0))
+        //     / this.PhysicsCalculations.magnitude(vec3(this.travel_segment_start[0] - this.travel_segment_end[0], this.travel_segment_start[1] - this.travel_segment_end[1], 0));
+        //
+        // this.dt = this.dt * (1 - travel_proportion);
 
         this.update_bounce_velocity(normal, bounciness);
-        this.position = collision_point;
+
+        this.position = this.PhysicsCalculations.addVectors(collision_point, this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, .00001));
     }
 
     update_bounce_velocity(normal, bounciness) {
@@ -99,11 +101,12 @@ export class Ball {
                 second_vertex_index = 0;
             }
 
-            collision_point = this.PhysicsCalculations.findIntersectionPoint(this.travel_segment_start, this.travel_segment_end, obstacle.vertices[i], obstacle.vertices[second_vertex_index]);
+            collision_point = this.PhysicsCalculations.findIntersectionPoint1(this.travel_segment_start, this.travel_segment_end, obstacle.vertices[i], obstacle.vertices[second_vertex_index]);
 
             if (collision_point !== null) {
                 this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),1, collision_point);
-                this.debug_points.push(new Debug_Point(this.material, collision_point));
+                //this.debug_points.push(new Debug_Point(this.material, collision_point));
+                return;
             }
         }
     }

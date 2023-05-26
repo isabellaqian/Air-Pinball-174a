@@ -60,8 +60,11 @@ export class Assignment3 extends Scene {
 
         this.right_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(31, 0, 0), 1, 1, 22, 0, 0, 1);
 
-        this.slanted = new Rectangular(this.shapes.cube, this.materials.test, vec3(-5, -10, 0), 1, 10, 5, 0, 30, 1);
+        this.slanted = new Rectangular(this.shapes.cube, this.materials.test, vec3(-5, -10, 0), 1, 10, 5, 0, -30, 1);
         this.obstacles = [this.bot_wall,this.top_wall, this.left_wall, this.right_wall, this.slanted];
+
+        console.log("test intersection point: " + this.PhysicsCalculations.findIntersectionPoint
+        (vec3(0,2,0), vec3(2,0,0), vec3(2,1.5,0), vec3(0,0.5,0)));
 
 
         this.debug_points = [
