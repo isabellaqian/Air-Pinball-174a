@@ -18,6 +18,55 @@ const {
 } = tiny;
 
 export class PhysicsCalculations {
+  findIntersectionPoint1(
+    segment1_start,
+    segment1_end,
+    segment2_start,
+    segment2_end
+  ) {
+    const x1 = segment1_start[0];
+    const y1 = segment1_start[1];
+    const x2 = segment1_end[0];
+    const y2 = segment1_end[1];
+
+    const x3 = segment2_start[0];
+    const y3 = segment2_start[1];
+    const x4 = segment2_end[0];
+    const y4 = segment2_end[1];
+
+    const denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+    if (denominator === 0) {
+      // The lines are parallel or coincident, no intersection
+      return null;
+    }
+
+    const intersectX =
+      ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) /
+      denominator;
+
+    const intersectY =
+      ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) /
+      denominator;
+
+    // Check if the intersection point lies within both line segments
+    if (
+      this.isBetween(intersectX, x1, x2) &&
+      this.isBetween(intersectY, y1, y2) &&
+      this.isBetween(intersectX, x3, x4) &&
+      this.isBetween(intersectY, y3, y4)
+    ) {
+      return vec3(intersectX, intersectY, 0);
+    }
+
+    // Intersection point is outside the line segments
+    return null;
+  }
+
+  isBetween(value, start, end) {
+    return value >= Math.min(start, end) && value <= Math.max(start, end);
+  }
+
   findIntersectionPoint(line_1_begin, line_1_end, line_2_begin, line_2_end) {
     const x1 = line_1_begin[0];
     const y1 = line_1_begin[1];
@@ -127,8 +176,7 @@ export class PhysicsCalculations {
   }
 
   normal_of_line_segment(start, end) {
-    return vec3(start[1] - end[1], end[0] - start[0], 0);
-    // return vec3(end[1] - start[1], start[0] - end[0], 0);
+    return vec3(end[1] - start[1], start[0] - end[0], 0);
   }
 
   dot_product(vector1, vector2) {
@@ -136,15 +184,22 @@ export class PhysicsCalculations {
   }
 
   multiplyVectorByScalar(vector, scalar) {
-    return vec3(vector[0] * scalar, vector[1] * scalar, vector[2] * scalar, 0);
+    return vec3(vector[0] * scalar, vector[1] * scalar, vector[2] * scalar);
   }
 
   subtractVectors(vector1, vector2) {
     return vec3(
       vector1[0] - vector2[0],
       vector1[1] - vector2[1],
-      vector1[2] - vector2[2],
-      0
+      vector1[2] - vector2[2]
+    );
+  }
+
+  addVectors(vector1, vector2) {
+    return vec3(
+      vector1[0] + vector2[0],
+      vector1[1] + vector2[1],
+      vector1[2] + vector2[2]
     );
   }
 }

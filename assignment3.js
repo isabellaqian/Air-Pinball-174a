@@ -79,11 +79,11 @@ export class Assignment3 extends Scene {
     this.Ball = new Ball(
       this.shapes.sphere,
       this.materials.ball,
+      //vec3(0, 6, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this);
       vec3(0, 6, 0),
-      vec3(this.get_random_float(-20, 20), this.get_random_float(-6, 6), 0),
+      vec3(0, 0, 0),
       this
     );
-    //vec3(0, 6, 0), vec3(0, 0, 0),this);
 
     this.circular_bouncer = new Cylindrical(
       this.shapes.torus,
@@ -108,7 +108,7 @@ export class Assignment3 extends Scene {
       this.shapes.cube,
       this.materials.test,
       vec3(0, -21, 0),
-      1,
+      3,
       30,
       1,
       0,
@@ -160,7 +160,7 @@ export class Assignment3 extends Scene {
       10,
       5,
       0,
-      30,
+      -30,
       1
     );
     this.obstacles = [
@@ -170,6 +170,18 @@ export class Assignment3 extends Scene {
       this.right_wall,
       this.slanted,
     ];
+
+    console.log(
+      "test intersection point: " +
+        this.PhysicsCalculations.findIntersectionPoint(
+          vec3(0, 2, 0),
+          vec3(2, 0, 0),
+          vec3(2, 1.5, 0),
+          vec3(0, 0.5, 0)
+        )
+    );
+
+    this.debug_points = [];
   }
 
   make_control_panel() {

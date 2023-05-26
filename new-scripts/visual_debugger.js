@@ -5,15 +5,23 @@ const {
 } = tiny;
 
 export class Debug_Point {
-    constructor(material, position) {
+    constructor(material, position, life = 1) {
         this.material = material;
         this.position = position;
         this.shape = new defs.Subdivision_Sphere(4);
+        this.life = life;
 
         this.vertices = [];
     }
 
     render(context, program_state) {
+        this.life -= program_state.animation_delta_time / 1000;
+
+        if (this.life <= 0) {
+            delete this;
+            return;
+        }
+
         this.shape.draw(context, program_state, Mat4.identity().times(Mat4.translation(this.position[0],this.position[1], 0))
             .times(Mat4.scale(1, 1, 2)), this.material);
     }
