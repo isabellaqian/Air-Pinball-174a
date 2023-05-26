@@ -2,6 +2,7 @@ import {defs, tiny} from './examples/common.js';
 import {Ball} from './new-scripts/ball.js';
 import {Obstacle, Cylindrical, Rectangular} from './new-scripts/obstacles.js';
 import {PhysicsCalculations} from "./new-scripts/physics-calculations.js";
+import {Debug_Point} from "./new-scripts/visual_debugger.js";
 
 const {
     Vector, Vector3, vec, vec3, vec4, color, hex_color, Shader, Matrix, Mat4, Light, Shape, Material, Scene,
@@ -42,8 +43,8 @@ export class Assignment3 extends Scene {
         this.PhysicsCalculations = new PhysicsCalculations();
 
         this.Ball = new Ball(this.shapes.sphere, this.materials.ball,
-            //vec3(0, 6, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this);
-            vec3(0, 6, 0), vec3(0, 0, 0),this);
+            vec3(0, 6, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this);
+            //vec3(0, 6, 0), vec3(0, 0, 0),this);
 
         this.circular_bouncer = new Cylindrical(this.shapes.torus, this.materials.circular_bouncer, vec3(0, 0, 0), 1);
 
@@ -60,6 +61,10 @@ export class Assignment3 extends Scene {
         this.slanted = new Rectangular(this.shapes.cube, this.materials.test, vec3(-5, -10, 0), 1, 10, 1, 0, -30, 1);
 
         this.obstacles = [this.bot_wall,this.top_wall, this.left_wall, this.right_wall, this.slanted];
+
+
+        this.debug_points = [
+        ];
     }
 
     make_control_panel() {
@@ -121,7 +126,10 @@ export class Assignment3 extends Scene {
         model_transform = model_transform.times(Mat4.translation(29, -19, 5));
         this.shapes.circle.draw(context, program_state, model_transform, this.materials.test);
 
-        //this.right_floor.render(context, program_state);
+        for (let i = 0; i < this.scene.debug_points.length; i++)
+        {
+            this.debug_points[i].render(context, program_state);
+        }
     }
 }
 

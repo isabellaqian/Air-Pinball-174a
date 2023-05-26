@@ -11,7 +11,7 @@ export class Ball {
         this.material = material;
         this.position = position;
         this.velocity = velocity;
-        this.gravity = -30; //-300
+        this.gravity = -50; //-300
         this.bounciness = .95;
         this.scene = scene;
 
@@ -38,9 +38,9 @@ export class Ball {
         this.travel_segment_start = this.position;
 
         for (let i = 0; i < this.scene.obstacles.length; i++) {
-            this.handle_obstacle_collision(this.scene.obstacles[i]);
+            //this.handle_obstacle_collision(this.scene.obstacles[i]);
         }
-        //this.handle_boundary_collision(8, 6);
+        this.handle_boundary_collision(8, 6);
     }
 
     collide(normal, bounciness, collision_point) {
@@ -80,13 +80,6 @@ export class Ball {
         //this.velocity = vec3((-normal_component[0] + tangent_component[0]) * bounciness * this.bounciness,
         //    (-normal_component[1] + tangent_component[1]) * bounciness * this.bounciness, 0);
 
-        return;
-
-        if (this.PhysicsCalculations.sqr_magnitude(this.velocity) < this.dt * 2500){
-            this.velocity[0] = 0;
-            this.velocity[1] = 0;
-        }
-
         //this.update_position();
     }
 
@@ -107,8 +100,8 @@ export class Ball {
 
         //wall_points are denoted in pairs of points that make up a line segment
         const wall_points = [
-            vec3(-999, 999 * .7, 0), vec3(0, -height, 0),
-            vec3(0, -height, 0), vec3(999, 999 * .7, 0),
+            vec3(-999, 999 * .7, 0), vec3(-.1, -height, 0),
+            vec3(.1, -height, 0), vec3(999, 999 * .7, 0),
 
             vec3(-999, height, 0), vec3(999, height, 0),
             vec3(-width, -999, 0), vec3(-width, 999, 0),
@@ -122,7 +115,7 @@ export class Ball {
             collision_point = this.PhysicsCalculations.findIntersectionPoint(this.travel_segment_start, this.travel_segment_end, wall_points[i], wall_points[i + 1]);
 
             if (collision_point !== null){
-                this.collide(this.PhysicsCalculations.normal_of_line_segment(wall_points[i], wall_points[i + 1]),1, collision_point);
+                this.collide(this.PhysicsCalculations.normal_of_line_segment(wall_points[i], wall_points[i + 1]),.5, collision_point);
             }
         }
     }
