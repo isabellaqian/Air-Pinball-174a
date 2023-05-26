@@ -4,29 +4,12 @@ import { Obstacle, Cylindrical, Rectangular } from "./new-scripts/obstacles.js";
 import { PhysicsCalculations } from "./new-scripts/physics-calculations.js";
 import { Debug_Point } from "./new-scripts/visual_debugger.js";
 
-const {
-  Vector,
-  Vector3,
-  vec,
-  vec3,
-  vec4,
-  color,
-  hex_color,
-  Shader,
-  Matrix,
-  Mat4,
-  Light,
-  Shape,
-  Material,
-  Scene,
-} = tiny;
+const {Vector, Vector3, vec, vec3, vec4, color, hex_color, Shader, Matrix, Mat4, Light, Shape, Material, Scene} = tiny;
 
 export class Assignment3 extends Scene {
   constructor() {
-    // constructor(): Scenes begin by populating initial values like the Shapes and Materials they'll need.
     super();
-
-    // At the beginning of our program, load one of each of these shape definitions onto the GPU.
+    // Shape Definitions
     this.shapes = {
       torus: new defs.Torus(15, 15),
       torus2: new defs.Torus(3, 15),
@@ -34,149 +17,83 @@ export class Assignment3 extends Scene {
       circle: new defs.Regular_2D_Polygon(1, 15),
       cube: new defs.Cube(),
       square: new defs.Square(),
-      // TODO:  Fill in as many additional shape instances as needed in this key/value table.
-      //        (Requirement 1)
     };
 
-    // *** Materials
+    // Material Definitions
     this.materials = {
-      test: new Material(new defs.Phong_Shader(), {
-        ambient: 0.4,
-        diffusivity: 0.5,
-        specularity: 0,
-        color: hex_color("#b3abff"),
+      table: new Material(new defs.Phong_Shader(), {
+        ambient: 0.4, diffusivity: 0.5, specularity: 0, color: hex_color("#363F69"),
       }),
-      ring: new Material(new Ring_Shader()),
-
-      // TODO:  Fill in as many additional material objects as needed in this key/value table.
-      //        (Requirement 4)
+      wall: new Material(new defs.Phong_Shader(), {
+        ambient: 0.4, diffusivity: 0.5, specularity: 0, color: hex_color("#1D2951"),
+      }),
+      glass: new Material(new defs.Phong_Shader(), {
+          ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#00FFFFFF")
+      }),
       ball: new Material(new defs.Phong_Shader(), {
-        ambient: 0.4,
-        diffusivity: 1,
-        specularity: 1,
-        color: hex_color("#888888"),
+        ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#888888"),
       }),
       circular_bouncer: new Material(new Gouraud_Shader(), {
-        ambient: 0.4,
-        diffusivity: 1,
-        specularity: 0.5,
-        color: hex_color("#ff0000"),
+        ambient: 0.4, diffusivity: 1, specularity: 0.5, color: hex_color("#ff0000"),
       }),
       debug_material: new Material(new Gouraud_Shader(), {
-        ambient: 1,
-        diffusivity: 1,
-        color: hex_color("#ff0000"),
+        ambient: 1, diffusivity: 1, color: hex_color("#ff0000"),
       }),
-        obstacle: new Material(new defs.Phong_Shader(),
-            {ambient: 0.4, diffusivity: 1, specularity: 0, color: hex_color("#0000FF")}),
+      obstacle: new Material(new defs.Phong_Shader(),
+        {ambient: 0.4, diffusivity: 1, specularity: 0, color: hex_color("#0000FF")
+      }),
     };
 
     this.initial_camera_location = Mat4.look_at(
-      vec3(0, -10, 60),
-      vec3(0, 0, 0),
-      vec3(0, 1, 0)
+      vec3(0, -50, 60), vec3(0, 0, 0), vec3(0, 1, 0)
     );
+
     this.PhysicsCalculations = new PhysicsCalculations();
 
+    // Pinball
     this.Ball = new Ball(
-      this.shapes.sphere,
-      this.materials.ball,
-      vec3(0, 10, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this
-      //vec3(0, 6, 0),
-      //vec3(0, 0, 0),
-
+      this.shapes.sphere, this.materials.ball, vec3(0, 10, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0), this
     );
 
     this.circular_bouncer = new Cylindrical(
-      this.shapes.torus,
-      this.materials.circular_bouncer,
-      vec3(0, 0, 0),
-      1
+      this.shapes.torus, this.materials.circular_bouncer, vec3(0, 0, 0), 1
     );
 
-    this.background = new Rectangular(
-      this.shapes.cube,
-      this.materials.test,
-      vec3(0, 0, 0),
-      1,
-      30,
-      20,
-      -1,
-      0,
-      0.1
+    this.table = new Rectangular(
+      this.shapes.cube, this.materials.table, vec3(0, 0, 0), 1, 20, 25, -1, 0, 0.1
     );
 
     this.bot_wall = new Rectangular(
-      this.shapes.cube,
-      this.materials.test,
-      vec3(0, -21, 0),
-      1.2,
-      30,
-      1,
-      0,
-      0,
-      1
+      this.shapes.cube, this.materials.wall, vec3(0, -26, 0), 1.2, 20, 1, 0, 0, 1
     );
 
     this.top_wall = new Rectangular(
-      this.shapes.cube,
-      this.materials.test,
-      vec3(0, 21, 0),
-      0.5,
-      30,
-      1,
-      0,
-      0,
-      1
+      this.shapes.cube, this.materials.wall, vec3(0, 26, 0), 0.5, 20, 1, 0, 0, 1
     );
 
     this.left_wall = new Rectangular(
-      this.shapes.cube,
-      this.materials.test,
-      vec3(-31, 0, 0),
-      1,
-      1,
-      22,
-      0,
-      0,
-      1
+      this.shapes.cube, this.materials.wall, vec3(-21, 0, 0), 1, 1, 27, 0, 0, 1
     );
 
     this.right_wall = new Rectangular(
-      this.shapes.cube,
-      this.materials.test,
-      vec3(31, 0, 0),
-      1,
-      1,
-      22,
-      0,
-      0,
-      1
+      this.shapes.cube, this.materials.wall, vec3(21, 0, 0), 1, 1, 27, 0, 0, 1
     );
 
     this.obstacle1 = new Rectangular(
-      this.shapes.cube,
-      this.materials.obstacle,
-      vec3(-10, 10, 0),
-      1,
-      3,
-      1,
-      0,
-      -30,
-      1
+      this.shapes.cube, this.materials.obstacle, vec3(-10, 10, 0), 1, 3, 1, 0, -30, 1
     );
 
-    this.obstacle2 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-        vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1);
+    this.obstacle2 = new Rectangular(
+      this.shapes.cube, this.materials.obstacle, vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1
+    );
 
-      this.obstacle3 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-          vec3(15, 15, 0), 1, 3, 1, 0, 60, 1);
+    this.obstacle3 = new Rectangular(
+      this.shapes.cube, this.materials.obstacle, vec3(15, 15, 0), 1, 3, 1, 0, 60, 1
+    );
 
-      this.obstacle4 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-          vec3(10, 0, 0), 1, 3, 1, 0, -60, 1);
-
-      this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-          vec3(20, -10, 0), 1, 3, 1, 0, 50, 1);
+    this.obstacle4 = new Rectangular(
+      this.shapes.cube, this.materials.obstacle, vec3(10, 0, 0), 1, 3, 1, 0, -60, 1
+    );
 
     this.obstacles = [
       this.bot_wall,
@@ -184,10 +101,9 @@ export class Assignment3 extends Scene {
       this.left_wall,
       this.right_wall,
       this.obstacle1,
-        this.obstacle2,
-        this.obstacle3,
-        this.obstacle4,
-        this.obstacle5
+      this.obstacle2,
+      this.obstacle3,
+      this.obstacle4,
     ];
 
     console.log(
@@ -282,7 +198,7 @@ export class Assignment3 extends Scene {
     this.Ball.update_object(context, program_state);
     //this.circular_bouncer.render(context, program_state, model_transform);
 
-    this.background.render(context, program_state);
+    this.table.render(context, program_state);
 
     this.bot_wall.render(context, program_state);
     this.top_wall.render(context, program_state);
@@ -292,15 +208,9 @@ export class Assignment3 extends Scene {
       this.obstacle2.render(context, program_state);
       this.obstacle3.render(context, program_state);
       this.obstacle4.render(context, program_state);
-      this.obstacle5.render(context, program_state);
 
     model_transform = model_transform.times(Mat4.translation(29, -19, 5));
-    this.shapes.circle.draw(
-      context,
-      program_state,
-      model_transform,
-      this.materials.test
-    );
+
 
     const start = [0, 0];
     const end = [5, 0];
