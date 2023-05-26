@@ -6,9 +6,6 @@ const {
 
 export class PhysicsCalculations {
 
-    findIntersectionPoint1(line_1_begin, line_1_end, line_2_begin, line_2_end) {
-        let det = ;
-    }
 
     findIntersectionPoint(line_1_begin, line_1_end, line_2_begin, line_2_end) {
         const x1 = line_1_begin[0];
