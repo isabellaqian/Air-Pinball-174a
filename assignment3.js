@@ -45,14 +45,14 @@ export class Assignment3 extends Scene {
         this.PhysicsCalculations = new PhysicsCalculations();
 
         this.Ball = new Ball(this.shapes.sphere, this.materials.ball,
-            vec3(0, 6, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this);
-            //vec3(0, 6, 0), vec3(0, 0, 0),this);
+            //vec3(0, 6, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this);
+            vec3(0, 6, 0), vec3(0, 0, 0),this);
 
         this.circular_bouncer = new Cylindrical(this.shapes.torus, this.materials.circular_bouncer, vec3(0, 0, 0), 1);
 
         this.background = new Rectangular(this.shapes.cube, this.materials.test, vec3(0, 0, 0), 1, 30, 20, -1, 0, .1);
 
-        this.bot_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(0, -21, 0), 1, 30, 1, 0, 0, 1);
+        this.bot_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(0, -21, 0), 3, 30, 1, 0, 0, 1);
 
         this.top_wall = new Rectangular(this.shapes.cube, this.materials.test, vec3(0, 21, 0), 1, 30, 1, 0, 0, 1);
 
