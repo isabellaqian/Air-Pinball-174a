@@ -1,92 +1,150 @@
-import {defs, tiny} from '../examples/common.js';
+import { defs, tiny } from "../examples/common.js";
 
 const {
-    Vector, Vector3, vec, vec3, vec4, color, hex_color, Shader, Matrix, Mat4, Light, Shape, Material, Scene,
+  Vector,
+  Vector3,
+  vec,
+  vec3,
+  vec4,
+  color,
+  hex_color,
+  Shader,
+  Matrix,
+  Mat4,
+  Light,
+  Shape,
+  Material,
+  Scene,
 } = tiny;
 
 export class PhysicsCalculations {
+  findIntersectionPoint(line_1_begin, line_1_end, line_2_begin, line_2_end) {
+    const x1 = line_1_begin[0];
+    const y1 = line_1_begin[1];
+    const x2 = line_1_end[0];
+    const y2 = line_1_end[1];
+    const x3 = line_2_begin[0];
+    const y3 = line_2_begin[1];
+    const x4 = line_2_end[0];
+    const y4 = line_2_end[1];
 
+    const denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
-    findIntersectionPoint(line_1_begin, line_1_end, line_2_begin, line_2_end) {
-        const x1 = line_1_begin[0];
-        const y1 = line_1_begin[1];
-        const x2 = line_1_end[0];
-        const y2 = line_1_end[1];
-        const x3 = line_2_begin[0];
-        const y3 = line_2_begin[1];
-        const x4 = line_2_end[0];
-        const y4 = line_2_end[1];
-
-        const denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-
-        if (denominator === 0) {
-            return null;
-        }
-
-        const numerator1 = (x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4);
-        const numerator2 = (x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4);
-
-        const intersectionX = numerator1 / denominator;
-        const intersectionY = numerator2 / denominator;
-
-        if (
-            intersectionX < Math.min(x1, x2) ||
-            intersectionX > Math.max(x1, x2) ||
-            intersectionY < Math.min(y1, y2) ||
-            intersectionY > Math.max(y1, y2) ||
-            intersectionX < Math.min(x3, x4) ||
-            intersectionX > Math.max(x3, x4) ||
-            intersectionY < Math.min(y3, y4) ||
-            intersectionY > Math.max(y3, y4)
-        ) {
-            return null; // Intersection point lies outside the segments
-        }
-
-        return vec3(intersectionX, intersectionY, 0);
+    if (denominator === 0) {
+      return null;
     }
 
-    find_circle_intersection_point(line_1_begin, line_1_end, circle_center, circle_radius) {
+    const numerator1 =
+      (x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4);
+    const numerator2 =
+      (x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4);
 
+    const intersectionX = numerator1 / denominator;
+    const intersectionY = numerator2 / denominator;
+
+    if (
+      intersectionX < Math.min(x1, x2) ||
+      intersectionX > Math.max(x1, x2) ||
+      intersectionY < Math.min(y1, y2) ||
+      intersectionY > Math.max(y1, y2) ||
+      intersectionX < Math.min(x3, x4) ||
+      intersectionX > Math.max(x3, x4) ||
+      intersectionY < Math.min(y3, y4) ||
+      intersectionY > Math.max(y3, y4)
+    ) {
+      return null; // Intersection point lies outside the segments
     }
 
-    calculateBounceVector(directionVector, normalVector) {
-        // Make sure incidentVector and normalVector are normalized (unit vectors)
-        const direction = this.normalizeVector(directionVector);
-        const normal = this.normalizeVector(normalVector);
+    return vec3(intersectionX, intersectionY, 0);
+  }
 
-        const dotProduct = dotProduct(direction, normal);
-        const reflection = this.subtractVectors(direction, this.multiplyVectorByScalar(normal, 2 * dotProduct));
-
-        return this.normalizeVector(reflection);
+  findCircleIntersectionPoint(
+    line_1_begin,
+    line_1_end,
+    circle_center,
+    circle_radius
+  ) {
+    const vecA = vec3(
+      circle_center[0] - line_1_begin[0],
+      circle_center[1] - line_1_begin[1],
+      0,
+      1
+    );
+    const vecB = vec3(
+      line_1_end[0] - line_1_begin[0],
+      line_1_end[1] - line_1_begin[1],
+      0,
+      1
+    );
+    const projectAOnB = this.projection(vecA, vecB);
+    const perpendicular = this.subtractVectors(vecA, projectAOnB);
+    if (this.magnitude(perpendicular) > circle_radius) {
+      console.log("physics calc - no intersection");
+      return null; //not intersecting
     }
+    const distanceToIntersection = Math.sqrt(
+      circle_radius * circle_radius - this.sqr_magnitude(perpendicular)
+    );
+    const vecToSubtract = this.multiplyVectorByScalar(
+      this.normalizeVector(vecB),
+      distanceToIntersection
+    );
+    return this.subtractVectors(projectAOnB, vecToSubtract);
+  }
 
-    normalizeVector(vector) {
-        const magnitude = Math.sqrt(this.dot_product(vector, vector));
-        return this.multiplyVectorByScalar(vector, 1 / magnitude);
-    }
+  projection(a, b) {
+    //returns projection vector of a onto b
+    const scalarProj = this.dot_product(a, b) / this.sqr_magnitude(b);
+    return this.multiplyVectorByScalar(b, scalarProj);
+  }
 
-    magnitude(vector) {
-        return Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
-    }
+  calculateBounceVector(directionVector, normalVector) {
+    // Make sure incidentVector and normalVector are normalized (unit vectors)
+    const direction = this.normalizeVector(directionVector);
+    const normal = this.normalizeVector(normalVector);
 
-    sqr_magnitude(vector) {
-        return vector[0] * vector[0] + vector[1] * vector[1];
-    }
+    const dotProduct = dotProduct(direction, normal);
+    const reflection = this.subtractVectors(
+      direction,
+      this.multiplyVectorByScalar(normal, 2 * dotProduct)
+    );
 
-    normal_of_line_segment(start, end) {
-        return vec3(start[1] - end[1], end[0] - start[0], 0);
-        //return vec3(end[1] - start[1], start[0] - end[0], 0);
-    }
+    return this.normalizeVector(reflection);
+  }
 
-    dot_product(vector1, vector2) {
-        return vector1[0] * vector2[0] + vector1[1] * vector2[1];
-    }
+  normalizeVector(vector) {
+    //returns unit vector
+    const magnitude = Math.sqrt(this.dot_product(vector, vector));
+    return this.multiplyVectorByScalar(vector, 1 / magnitude);
+  }
 
-    multiplyVectorByScalar(vector, scalar) {
-        return vec3(vector[0] * scalar, vector[1] * scalar, vector[2] * scalar, 0);
-    }
+  magnitude(vector) {
+    return Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+  }
 
-    subtractVectors(vector1, vector2) {
-        return vec3(vector1[0] - vector2[0], vector1[1] - vector2[1], vector1[2] - vector2[2], 0);
-    }
+  sqr_magnitude(vector) {
+    return vector[0] * vector[0] + vector[1] * vector[1];
+  }
+
+  normal_of_line_segment(start, end) {
+    return vec3(start[1] - end[1], end[0] - start[0], 0);
+    // return vec3(end[1] - start[1], start[0] - end[0], 0);
+  }
+
+  dot_product(vector1, vector2) {
+    return vector1[0] * vector2[0] + vector1[1] * vector2[1];
+  }
+
+  multiplyVectorByScalar(vector, scalar) {
+    return vec3(vector[0] * scalar, vector[1] * scalar, vector[2] * scalar, 0);
+  }
+
+  subtractVectors(vector1, vector2) {
+    return vec3(
+      vector1[0] - vector2[0],
+      vector1[1] - vector2[1],
+      vector1[2] - vector2[2],
+      0
+    );
+  }
 }
