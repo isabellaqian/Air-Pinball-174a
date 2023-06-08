@@ -27,8 +27,8 @@ export class Assignment3 extends Scene {
       wall: new Material(new defs.Phong_Shader(), {
         ambient: 0.4, diffusivity: 0.5, specularity: 0, color: hex_color("#1D2951"),
       }),
-      glass: new Material(new defs.Phong_Shader(), {
-          ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#00FFFFFF")
+      headboard: new Material(new defs.Phong_Shader(), {
+          ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#FFFFFF")
       }),
       ball: new Material(new defs.Phong_Shader(), {
         ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#888888"),
@@ -45,7 +45,7 @@ export class Assignment3 extends Scene {
     };
 
     this.initial_camera_location = Mat4.look_at(
-      vec3(0, -50, 60), vec3(0, 0, 0), vec3(0, 1, 0)
+      vec3(0, -70, 20), vec3(0, 0, 10), vec3(0, 1, 0)
     );
 
     this.PhysicsCalculations = new PhysicsCalculations();
@@ -62,6 +62,10 @@ export class Assignment3 extends Scene {
     this.table = new Rectangular(
       this.shapes.cube, this.materials.table, vec3(0, 0, 0), 1, 20, 25, -1, 0, 0.1
     );
+
+    this.headboard = new Rectangular(
+        this.shapes.cube, this.materials.headboard, vec3(0, 28, 1), 1, 22, 1, 0, 0, 25
+    )
 
     this.bot_wall = new Rectangular(
       this.shapes.cube, this.materials.wall, vec3(0, -26, 0), 1.2, 20, 1, 0, 0, 1
@@ -119,43 +123,6 @@ export class Assignment3 extends Scene {
     this.debug_points = [];
   }
 
-  make_control_panel() {
-    // Draw the scene's buttons, setup their actions and keyboard shortcuts, and monitor live measurements.
-    this.key_triggered_button(
-      "View solar system",
-      ["Control", "0"],
-      () => (this.attached = () => null)
-    );
-    this.new_line();
-    this.key_triggered_button(
-      "Attach to planet 1",
-      ["Control", "1"],
-      () => (this.attached = () => this.planet_1)
-    );
-    this.key_triggered_button(
-      "Attach to planet 2",
-      ["Control", "2"],
-      () => (this.attached = () => this.planet_2)
-    );
-    this.new_line();
-    this.key_triggered_button(
-      "Attach to planet 3",
-      ["Control", "3"],
-      () => (this.attached = () => this.planet_3)
-    );
-    this.key_triggered_button(
-      "Attach to planet 4",
-      ["Control", "4"],
-      () => (this.attached = () => this.planet_4)
-    );
-    this.new_line();
-    this.key_triggered_button(
-      "Attach to moon",
-      ["Control", "m"],
-      () => (this.attached = () => this.moon)
-    );
-  }
-
   get_random_float(min, max) {
     return Math.random() * (max - min) + min;
   }
@@ -199,7 +166,7 @@ export class Assignment3 extends Scene {
     //this.circular_bouncer.render(context, program_state, model_transform);
 
     this.table.render(context, program_state);
-
+    this.headboard.render(context, program_state);
     this.bot_wall.render(context, program_state);
     this.top_wall.render(context, program_state);
     this.left_wall.render(context, program_state);
