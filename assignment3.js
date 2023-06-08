@@ -19,7 +19,10 @@ const {
   Shape,
   Material,
   Scene,
+  Texture
 } = tiny;
+
+const {Textured_Phong} = defs
 
 export class Assignment3 extends Scene {
   constructor() {
@@ -68,11 +71,17 @@ export class Assignment3 extends Scene {
         color: hex_color("#ff0000"),
       }),
         obstacle: new Material(new defs.Phong_Shader(),
-            {ambient: 0.4, diffusivity: 1, specularity: 0, color: hex_color("#0000FF")}),
+            {ambient: 0.4, diffusivity: 1, specularity: 0, color: hex_color("#0000FF"),
+            }),
+      background: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"),
+        ambient: 1,
+        texture: new Texture("assets/matrix.jpg")
+      }),
     };
 
     this.initial_camera_location = Mat4.look_at(
-      vec3(0, -10, 60),
+      vec3(0, -10, 95),
       vec3(0, 0, 0),
       vec3(0, 1, 0)
     );
@@ -96,11 +105,11 @@ export class Assignment3 extends Scene {
 
     this.background = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
+      this.materials.background,
       vec3(0, 0, 0),
       1,
-      30,
-      20,
+        30,
+        35,
       -1,
       0,
       0.1
@@ -108,8 +117,8 @@ export class Assignment3 extends Scene {
 
     this.bot_wall = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
-      vec3(0, -21, 0),
+        this.materials.background,
+      vec3(0, -36, 0),
       1.2,
       30,
       1,
@@ -120,10 +129,10 @@ export class Assignment3 extends Scene {
 
     this.top_wall = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
-      vec3(0, 21, 0),
+        this.materials.background,
+      vec3(0, 36, 0),
       0.5,
-      30,
+        30,
       1,
       0,
       0,
@@ -132,11 +141,11 @@ export class Assignment3 extends Scene {
 
     this.left_wall = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
+        this.materials.background,
       vec3(-31, 0, 0),
       1,
       1,
-      22,
+      37,
       0,
       0,
       1
@@ -144,11 +153,11 @@ export class Assignment3 extends Scene {
 
     this.right_wall = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
+        this.materials.background,
       vec3(31, 0, 0),
       1,
       1,
-      22,
+      37,
       0,
       0,
       1
@@ -156,7 +165,7 @@ export class Assignment3 extends Scene {
 
     this.obstacle1 = new Rectangular(
       this.shapes.cube,
-      this.materials.obstacle,
+        this.materials.background,
       vec3(-10, 10, 0),
       1,
       3,
@@ -166,16 +175,16 @@ export class Assignment3 extends Scene {
       1
     );
 
-    this.obstacle2 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+    this.obstacle2 = new Rectangular(this.shapes.cube, this.materials.background,
         vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1);
 
-      this.obstacle3 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+      this.obstacle3 = new Rectangular(this.shapes.cube, this.materials.background,
           vec3(15, 15, 0), 1, 3, 1, 0, 60, 1);
 
-      this.obstacle4 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+      this.obstacle4 = new Rectangular(this.shapes.cube, this.materials.background,
           vec3(10, 0, 0), 1, 3, 1, 0, -60, 1);
 
-      this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+      this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.background,
           vec3(20, -10, 0), 1, 3, 1, 0, 50, 1);
 
     this.obstacles = [
@@ -293,14 +302,6 @@ export class Assignment3 extends Scene {
       this.obstacle3.render(context, program_state);
       this.obstacle4.render(context, program_state);
       this.obstacle5.render(context, program_state);
-
-    model_transform = model_transform.times(Mat4.translation(29, -19, 5));
-    this.shapes.circle.draw(
-      context,
-      program_state,
-      model_transform,
-      this.materials.test
-    );
 
     const start = [0, 0];
     const end = [5, 0];
