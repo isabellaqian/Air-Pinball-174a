@@ -128,7 +128,7 @@ export class PhysicsCalculations {
     const projectAOnB = this.projection(vecA, vecB);
     const perpendicular = this.subtractVectors(vecA, projectAOnB);
     if (this.magnitude(perpendicular) > circle_radius) {
-      console.log("physics calc - no intersection");
+      //console.log("physics calc - no intersection");
       return null; //not intersecting
     }
     const distanceToIntersection = Math.sqrt(
@@ -201,5 +201,27 @@ export class PhysicsCalculations {
       vector1[1] + vector2[1],
       vector1[2] + vector2[2]
     );
+  }
+
+  isPointInTriangle(point, vertex1, vertex2, vertex3) {
+    // Calculate barycentric coordinates
+    const denominator =
+        (vertex2[1] - vertex3[1]) * (vertex1[0] - vertex3[0]) +
+        (vertex3[0] - vertex2[0]) * (vertex1[1] - vertex3[1]);
+
+    const alpha =
+        ((vertex2[1] - vertex3[1]) * (point[0] - vertex3[0]) +
+            (vertex3[0] - vertex2[0]) * (point[1] - vertex3[1])) /
+        denominator;
+
+    const beta =
+        ((vertex3[1] - vertex1[1]) * (point[0] - vertex3[0]) +
+            (vertex1[0] - vertex3[0]) * (point[1] - vertex3[1])) /
+        denominator;
+
+    const gamma = 1 - alpha - beta;
+
+    // Check if the point is inside the triangle
+    return alpha >= 0 && beta >= 0 && gamma >= 0;
   }
 }
