@@ -28,7 +28,7 @@ export class Assignment3 extends Scene {
         ambient: 0.4, diffusivity: 0.5, specularity: 0, color: hex_color("#1D2951"),
       }),
       headboard: new Material(new defs.Textured_Phong(), {
-          ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#FFFFFF"), texture: new Texture("assets/stars.png", "LINEAR_MIPMAP_LINEAR"),
+          ambient: 1, specularity: 0, color: hex_color("#000000"), texture: new Texture("assets/background.png", "LINEAR_MIPMAP_LINEAR"),
       }),
       ball: new Material(new defs.Phong_Shader(), {
         ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#888888"),
@@ -64,7 +64,7 @@ export class Assignment3 extends Scene {
     );
 
     this.headboard = new Rectangular(
-        this.shapes.cube, this.materials.headboard, vec3(0, 28, 1), 1, 22, 1, 0, 0, 25
+        this.shapes.cube, this.materials.headboard, vec3(0, 28, 0), 1, 22, 1, 14, 0, 15
     )
 
     this.bot_wall = new Rectangular(
