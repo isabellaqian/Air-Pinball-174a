@@ -4,7 +4,7 @@ import { Obstacle, Cylindrical, Rectangular } from "./new-scripts/obstacles.js";
 import { PhysicsCalculations } from "./new-scripts/physics-calculations.js";
 import { Debug_Point } from "./new-scripts/visual_debugger.js";
 
-const {Vector, Vector3, vec, vec3, vec4, color, hex_color, Shader, Matrix, Mat4, Light, Shape, Material, Scene} = tiny;
+const {Vector, Vector3, vec, vec3, vec4, color, hex_color, Shader, Matrix, Mat4, Light, Shape, Material, Scene, Texture} = tiny;
 
 export class Assignment3 extends Scene {
   constructor() {
@@ -27,8 +27,8 @@ export class Assignment3 extends Scene {
       wall: new Material(new defs.Phong_Shader(), {
         ambient: 0.4, diffusivity: 0.5, specularity: 0, color: hex_color("#1D2951"),
       }),
-      headboard: new Material(new defs.Phong_Shader(), {
-          ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#FFFFFF")
+      headboard: new Material(new defs.Textured_Phong(), {
+          ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#FFFFFF"), texture: new Texture("assets/stars.png", "LINEAR_MIPMAP_LINEAR"),
       }),
       ball: new Material(new defs.Phong_Shader(), {
         ambient: 0.4, diffusivity: 1, specularity: 1, color: hex_color("#888888"),
