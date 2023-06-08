@@ -20,7 +20,10 @@ const {
   Shape,
   Material,
   Scene,
+  Texture
 } = tiny;
+
+const {Textured_Phong} = defs
 
 export class Assignment3 extends Scene {
   constructor() {
@@ -51,11 +54,17 @@ export class Assignment3 extends Scene {
 
       // TODO:  Fill in as many additional material objects as needed in this key/value table.
       //        (Requirement 4)
-      ball: new Material(new defs.Phong_Shader(), {
-        ambient: 0.4,
+      /*ball: new Material(new defs.Phong_Shader(), {
+        ambient: 1,
         diffusivity: 1,
         specularity: 1,
         color: hex_color("#888888"),
+      }),*/
+      ball: new Material(new Textured_Phong(), {
+        ambient: 1,
+        specularity: 1,
+        color: hex_color("#000000"),
+        texture: new Texture(("assets/fire.jpg"))
       }),
       circular_bouncer: new Material(new Gouraud_Shader(), {
         ambient: 0.4,
@@ -68,12 +77,26 @@ export class Assignment3 extends Scene {
         diffusivity: 1,
         color: hex_color("#ff0000"),
       }),
-        obstacle: new Material(new defs.Phong_Shader(),
-            {ambient: 0.4, diffusivity: 1, specularity: 0, color: hex_color("#0000FF")}),
+      obstacle: new Material(new Textured_Phong(), {
+        ambient: 1,
+        color: hex_color("#000000"),
+        texture: new Texture("assets/rock.jpg")
+      }),
+      background: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"),
+        ambient: 1,
+        texture: new Texture("assets/stars.jpg")
+      }),
+      wall: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"),
+        ambient: 1,
+        texture: new Texture("assets/metal.jpg")
+      }),
     };
 
     this.initial_camera_location = Mat4.look_at(
       vec3(0, -60, 60),
+      vec3(0, -10, 95),
       vec3(0, 0, 0),
       vec3(0, 1, 0)
     );
@@ -97,11 +120,11 @@ export class Assignment3 extends Scene {
 
     this.background = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
+      this.materials.background,
       vec3(0, 0, 0),
       1,
-      30,
-      20,
+        30,
+        35,
       -1,
       0,
       0.1
@@ -113,6 +136,10 @@ export class Assignment3 extends Scene {
       vec3(-20, -21, 0),
         .5,
       10,
+        this.materials.wall,
+      vec3(0, -36, 0),
+      1.2,
+      30,
       1,
       0,
       -30,
@@ -132,10 +159,10 @@ export class Assignment3 extends Scene {
 
     this.top_wall = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
-      vec3(0, 21, 0),
+        this.materials.wall,
+      vec3(0, 36, 0),
       0.5,
-      30,
+        30,
       1,
       0,
       0,
@@ -144,11 +171,11 @@ export class Assignment3 extends Scene {
 
     this.left_wall = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
+        this.materials.wall,
       vec3(-31, 0, 0),
       1,
       1,
-      22,
+      37,
       0,
       0,
       1
@@ -156,11 +183,11 @@ export class Assignment3 extends Scene {
 
     this.right_wall = new Rectangular(
       this.shapes.cube,
-      this.materials.test,
+        this.materials.wall,
       vec3(31, 0, 0),
       1,
       1,
-      22,
+      37,
       0,
       0,
       1
@@ -168,7 +195,7 @@ export class Assignment3 extends Scene {
 
     this.obstacle1 = new Rectangular(
       this.shapes.cube,
-      this.materials.obstacle,
+        this.materials.obstacle,
       vec3(-10, 10, 0),
       1,
       3,
@@ -278,7 +305,7 @@ export class Assignment3 extends Scene {
     // this.shapes.[XXX].draw([XXX]) // <--example
 
     // TODO: Lighting (Requirement 2)
-    const light_position = vec4(0, 5, 5, 1);
+    const light_position = vec4(0, 5, 100, 1);
     // The parameters of the Light are: position, color, size
     program_state.lights = [new Light(light_position, color(1, 1, 1, 1), 1000)];
 
@@ -305,7 +332,7 @@ export class Assignment3 extends Scene {
       this.obstacle3.render(context, program_state);
       this.obstacle4.render(context, program_state);
       this.obstacle5.render(context, program_state);
-
+      
     model_transform = model_transform.times(Mat4.translation(29, -19, 5));
     this.shapes.circle.draw(
       context,
@@ -315,7 +342,6 @@ export class Assignment3 extends Scene {
     );
 
     this.handle_flippers(context, program_state);
-
     const start = [0, 0];
     const end = [5, 0];
     const circle_center = [4, 4];
