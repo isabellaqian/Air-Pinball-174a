@@ -32,9 +32,9 @@ export class Ball {
         this.update_position();
 
         this.render(context, program_state);
-        /*for (let i = 0; i < this.debug_points.length; i++) {
+        for (let i = 0; i < this.debug_points.length; i++) {
             this.debug_points[i].render(context, program_state);
-        }*/
+        }
     }
 
     update_position() {
@@ -44,6 +44,9 @@ export class Ball {
 
         for (let i = 0; i < this.scene.obstacles.length; i++) {
             this.handle_obstacle_collision(this.scene.obstacles[i]);
+        }
+        for (let i = 0; i < this.scene.flippers.length; i++) {
+            this.handle_flipper_collision(this.scene.flippers[i]);
         }
         //this.handle_boundary_collision(8, 6);
     }
@@ -57,7 +60,7 @@ export class Ball {
         //
         // this.dt = this.dt * (1 - travel_proportion);
 
-        this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#ff0000')}), this.travel_segment_start));
+        //this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#ff0000')}), this.travel_segment_start));
         this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#ffb700')}), this.travel_segment_end));
 
         this.update_bounce_velocity(normal, bounciness);
@@ -93,6 +96,19 @@ export class Ball {
         //this.update_position();
     }
 
+    handle_flipper_collision(flipper) {
+        if (this.PhysicsCalculations.isPointInTriangle(this.position, flipper.triangleVertices[0], flipper.triangleVertices[1], flipper.triangleVertices[2]))
+        {
+            console.log("flipper collision");
+
+            this.velocity = this.PhysicsCalculations.normal_of_line_segment(flipper.triangleVertices[0], flipper.triangleVertices[2]);
+            if (flipper.isLeft) {this.velocity = this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, 5);}
+            else {this.velocity = this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, -5);}
+            //this.velocity +=
+            return;
+        }
+    }
+
     handle_obstacle_collision(obstacle) {
         let collision_point = null;
         let second_vertex_index = 0;
@@ -108,6 +124,8 @@ export class Ball {
 
             if (collision_point !== null) {
                 this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),obstacle.bounciness, collision_point);
+                this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), obstacle.vertices[i]));
+                this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), obstacle.vertices[second_vertex_index]));
                 return;
             }
         }

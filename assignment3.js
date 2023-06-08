@@ -1,5 +1,6 @@
 import { defs, tiny } from "./examples/common.js";
 import { Ball } from "./new-scripts/ball.js";
+import { Flipper } from "./new-scripts/flipper.js";
 import { Obstacle, Cylindrical, Rectangular } from "./new-scripts/obstacles.js";
 import { PhysicsCalculations } from "./new-scripts/physics-calculations.js";
 import { Debug_Point } from "./new-scripts/visual_debugger.js";
@@ -72,7 +73,7 @@ export class Assignment3 extends Scene {
     };
 
     this.initial_camera_location = Mat4.look_at(
-      vec3(0, -10, 60),
+      vec3(0, -60, 60),
       vec3(0, 0, 0),
       vec3(0, 1, 0)
     );
@@ -106,16 +107,27 @@ export class Assignment3 extends Scene {
       0.1
     );
 
-    this.bot_wall = new Rectangular(
+    this.bot_wall_left = new Rectangular(
       this.shapes.cube,
       this.materials.test,
-      vec3(0, -21, 0),
-      1.2,
-      30,
+      vec3(-20, -21, 0),
+        .5,
+      10,
       1,
       0,
-      0,
+      -30,
       1
+    );
+    this.bot_wall_right = new Rectangular(
+        this.shapes.cube,
+        this.materials.test,
+        vec3(20, -21, 0),
+        .5,
+        10,
+        1,
+        0,
+        30,
+        1
     );
 
     this.top_wall = new Rectangular(
@@ -178,73 +190,73 @@ export class Assignment3 extends Scene {
       this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.obstacle,
           vec3(20, -10, 0), 1, 3, 1, 0, 50, 1);
 
+    this.LeftKeyDown = false;
+    this.RightKeyDown = false;
+    this.LeftKeyLast = false;
+    this.RightKeyLast = false;
+
+    this.LeftFlipper = new Flipper(this.shapes.cube, this.materials.obstacle, vec3(-14,-25,0), this, true);
+    this.RightFlipper = new Flipper(this.shapes.cube, this.materials.obstacle, vec3(14,-25,0), this, false);
+
     this.obstacles = [
-      this.bot_wall,
-      this.top_wall,
-      this.left_wall,
-      this.right_wall,
-      this.obstacle1,
-        this.obstacle2,
-        this.obstacle3,
-        this.obstacle4,
-        this.obstacle5
+       this.bot_wall_left,
+       this.bot_wall_right,
+       this.top_wall,
+       this.left_wall,
+       this.right_wall,
+      // this.obstacle1,
+      // this.obstacle2,
+      // this.obstacle3,
+      // this.obstacle4,
+      // this.obstacle5,
     ];
 
-    console.log(
-      "test intersection point: " +
-        this.PhysicsCalculations.findIntersectionPoint(
-          vec3(0, 2, 0),
-          vec3(2, 0, 0),
-          vec3(2, 1.5, 0),
-          vec3(0, 0.5, 0)
-        )
-    );
+    this.flippers = [
+        this.LeftFlipper,
+        this.RightFlipper
+    ];
 
     this.debug_points = [];
   }
 
   make_control_panel() {
     // Draw the scene's buttons, setup their actions and keyboard shortcuts, and monitor live measurements.
-    this.key_triggered_button(
-      "View solar system",
-      ["Control", "0"],
-      () => (this.attached = () => null)
-    );
+
+    //super.make_control_panel();
     this.new_line();
-    this.key_triggered_button(
-      "Attach to planet 1",
-      ["Control", "1"],
-      () => (this.attached = () => this.planet_1)
-    );
-    this.key_triggered_button(
-      "Attach to planet 2",
-      ["Control", "2"],
-      () => (this.attached = () => this.planet_2)
-    );
-    this.new_line();
-    this.key_triggered_button(
-      "Attach to planet 3",
-      ["Control", "3"],
-      () => (this.attached = () => this.planet_3)
-    );
-    this.key_triggered_button(
-      "Attach to planet 4",
-      ["Control", "4"],
-      () => (this.attached = () => this.planet_4)
-    );
-    this.new_line();
-    this.key_triggered_button(
-      "Attach to moon",
-      ["Control", "m"],
-      () => (this.attached = () => this.moon)
-    );
+    this.key_triggered_button("Left Flipper", ["x"],
+        () => this.LeftKeyDown = true, "#6E6460", () => this.LeftKeyDown = false);
+
+    this.key_triggered_button("Right Flipper", ["m"],
+        () => this.RightKeyDown = true, "#6E6460", () => this.RightKeyDown = false);
   }
 
   get_random_float(min, max) {
     return Math.random() * (max - min) + min;
   }
 
+  handle_flippers(context, program_state){
+
+    this.LeftFlipper.update_object(context, program_state);
+    this.RightFlipper.update_object(context, program_state);
+
+    if (this.LeftKeyLast !== this.LeftKeyDown) {
+      this.LeftKeyLast = this.LeftKeyDown;
+      if (this.LeftKeyDown){
+        this.LeftFlipper.flick();
+      }
+    }
+
+    if (this.RightKeyLast !== this.RightKeyDown) {
+      this.RightKeyLast = this.RightKeyDown;
+      if (this.RightKeyDown){
+        this.RightFlipper.flick();
+      }
+    }
+  }
+
   display(context, program_state) {
+
     // display():  Called once per frame of animation.
     // Setup -- This part sets up the scene's overall camera matrix, projection matrix, and lights:
     if (!context.scratchpad.controls) {
@@ -278,13 +290,13 @@ export class Assignment3 extends Scene {
 
     //this.shapes.torus.draw(context, program_state, model_transform, this.materials.test.override({color: yellow}));
 
-    //BKMK
     this.Ball.update_object(context, program_state);
     //this.circular_bouncer.render(context, program_state, model_transform);
 
     this.background.render(context, program_state);
 
-    this.bot_wall.render(context, program_state);
+    this.bot_wall_left.render(context, program_state);
+    this.bot_wall_right.render(context, program_state);
     this.top_wall.render(context, program_state);
     this.left_wall.render(context, program_state);
     this.right_wall.render(context, program_state);
@@ -302,18 +314,20 @@ export class Assignment3 extends Scene {
       this.materials.test
     );
 
+    this.handle_flippers(context, program_state);
+
     const start = [0, 0];
     const end = [5, 0];
     const circle_center = [4, 4];
     const circle_radius = 2.9;
-    console.log("starting");
+    //console.log("starting");
     let res = this.PhysicsCalculations.findCircleIntersectionPoint(
       start,
       end,
       circle_center,
       circle_radius
     );
-    console.log("result,", res);
+    //console.log("result,", res);
     this.debug_points = [];
   }
 }
