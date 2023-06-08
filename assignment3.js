@@ -131,19 +131,16 @@ export class Assignment3 extends Scene {
     );
 
     this.bot_wall_left = new Rectangular(
-      this.shapes.cube,
-      this.materials.test,
-      vec3(-20, -21, 0),
+        this.shapes.cube,
+        this.materials.test,
+        vec3(-20, -21, 0),
         .5,
-      10,
-        this.materials.wall,
-      vec3(0, -36, 0),
-      1.2,
-      30,
-      1,
-      0,
-      -30,
-      1
+        10,
+        1,
+        0,
+        -30,
+        1,
+        0
     );
     this.bot_wall_right = new Rectangular(
         this.shapes.cube,
@@ -154,7 +151,8 @@ export class Assignment3 extends Scene {
         1,
         0,
         30,
-        1
+        1,
+        0
     );
 
     this.top_wall = new Rectangular(
@@ -166,7 +164,8 @@ export class Assignment3 extends Scene {
       1,
       0,
       0,
-      1
+      1,
+        0
     );
 
     this.left_wall = new Rectangular(
@@ -178,7 +177,8 @@ export class Assignment3 extends Scene {
       37,
       0,
       0,
-      1
+      1,
+        0
     );
 
     this.right_wall = new Rectangular(
@@ -190,7 +190,8 @@ export class Assignment3 extends Scene {
       37,
       0,
       0,
-      1
+      1,
+        0
     );
 
     this.obstacle1 = new Rectangular(
@@ -233,11 +234,11 @@ export class Assignment3 extends Scene {
        this.top_wall,
        this.left_wall,
        this.right_wall,
-      // this.obstacle1,
-      // this.obstacle2,
-      // this.obstacle3,
-      // this.obstacle4,
-      // this.obstacle5,
+      this.obstacle1,
+      this.obstacle2,
+      this.obstacle3,
+      this.obstacle4,
+      this.obstacle5,
     ];
 
     this.flippers = [
@@ -360,7 +361,7 @@ export class Assignment3 extends Scene {
     //console.log("result,", res);
     this.debug_points = [];
 
-    this.scoreboard.incrementScore();
+    //this.scoreboard.incrementScore();
   }
 }
 

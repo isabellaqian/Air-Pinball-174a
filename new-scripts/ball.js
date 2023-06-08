@@ -23,6 +23,8 @@ export class Ball {
 
         this.debug_points = [];
         this.PhysicsCalculations = new PhysicsCalculations();
+
+        this.flipperCooldown = 0;
     }
 
     update_object(context, program_state) {
@@ -34,6 +36,10 @@ export class Ball {
         this.render(context, program_state);
         for (let i = 0; i < this.debug_points.length; i++) {
             this.debug_points[i].render(context, program_state);
+        }
+
+        if (this.flipperCooldown > 0) {
+            this.flipperCooldown -= this.dt;
         }
     }
 
@@ -97,15 +103,20 @@ export class Ball {
     }
 
     handle_flipper_collision(flipper) {
-        if (this.PhysicsCalculations.isPointInTriangle(this.position, flipper.triangleVertices[0], flipper.triangleVertices[1], flipper.triangleVertices[2]))
+        if (this.flipperCooldown <= 0 && this.PhysicsCalculations.isPointInTriangle(this.position, flipper.triangleVertices[0], flipper.triangleVertices[1], flipper.triangleVertices[2]))
         {
             console.log("flipper collision");
 
             this.velocity = this.PhysicsCalculations.normal_of_line_segment(flipper.triangleVertices[0], flipper.triangleVertices[2]);
             if (flipper.isLeft) {this.velocity = this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, 5);}
             else {this.velocity = this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, -5);}
-            //this.velocity +=
-            return;
+
+            let tangentVector = this.PhysicsCalculations.projection(this.velocity, this.PhysicsCalculations.subtractVectors(flipper.triangleVertices[0], flipper.triangleVertices[1]));
+            this.velocity[0] += tangentVector[0];
+            this.velocity[1] += tangentVector[1];
+
+            this.scene.scoreboard.incrementScore(15);
+            this.flipperCooldown = .2;
         }
     }
 
@@ -126,6 +137,7 @@ export class Ball {
                 this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),obstacle.bounciness, collision_point);
                 this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), obstacle.vertices[i]));
                 this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), obstacle.vertices[second_vertex_index]));
+                this.scene.scoreboard.incrementScore(obstacle.points);
                 return;
             }
         }

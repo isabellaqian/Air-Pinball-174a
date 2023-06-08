@@ -18,7 +18,7 @@ export class Flipper extends Obstacle {
 
         this.rotationRate = 20;
         this.rotationRange = 3.14159/6;
-        this.edgeLength = 12;
+        this.edgeLength = 13;
 
         if (isLeft) {this.offset = 2;}
         else {this.offset = -2;}
@@ -75,7 +75,7 @@ export class Flipper extends Obstacle {
 
         for (let i = 0; i < this.debug_points.length; i++) {
             //NOTE: DEBUG TOGGLE
-            this.debug_points[i].render(context, program_state);
+            //this.debug_points[i].render(context, program_state);
         }
     }
 
@@ -125,7 +125,7 @@ export class Flipper extends Obstacle {
             Mat4.identity()
                 .times(Mat4.translation(this.position[0],this.position[1],this.position[2]))
                 .times(Mat4.rotation(this.rotation,0,0,1))
-                .times(Mat4.scale(4, .5, 1))
+                .times(Mat4.scale(4.2, .5, 1))
                 .times(Mat4.translation(this.offset,0,0))
             , this.material);
     }

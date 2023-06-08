@@ -6,7 +6,7 @@ const {
 } = tiny;
 
 export class Obstacle {
-    constructor(shape, material, position, bounciness) {
+    constructor(shape, material, position, bounciness, points = 10) {
         this.bounciness = bounciness;
         this.position = position;
         this.shape = shape;
@@ -14,6 +14,7 @@ export class Obstacle {
 
         this.vertices = [];
         this.debug_points = [];
+        this.points = points;
     }
     getVertices() {
         return this.vertices;
@@ -21,8 +22,8 @@ export class Obstacle {
 }
 
 export class Rectangular extends Obstacle {
-    constructor(shape, material, position, bounciness, width, height, depth, rotation, z_scale) {
-        super(shape, material, position, bounciness);
+    constructor(shape, material, position, bounciness, width, height, depth, rotation, z_scale, points = 10) {
+        super(shape, material, position, bounciness, points);
         this.width = width;
         this.height = height;
         this.depth = depth;
