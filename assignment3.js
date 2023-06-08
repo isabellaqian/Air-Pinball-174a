@@ -53,11 +53,17 @@ export class Assignment3 extends Scene {
 
       // TODO:  Fill in as many additional material objects as needed in this key/value table.
       //        (Requirement 4)
-      ball: new Material(new defs.Phong_Shader(), {
-        ambient: 0.4,
+      /*ball: new Material(new defs.Phong_Shader(), {
+        ambient: 1,
         diffusivity: 1,
         specularity: 1,
         color: hex_color("#888888"),
+      }),*/
+      ball: new Material(new Textured_Phong(), {
+        ambient: 1,
+        specularity: 1,
+        color: hex_color("#000000"),
+        texture: new Texture(("assets/fire.jpg"))
       }),
       circular_bouncer: new Material(new Gouraud_Shader(), {
         ambient: 0.4,
@@ -70,13 +76,20 @@ export class Assignment3 extends Scene {
         diffusivity: 1,
         color: hex_color("#ff0000"),
       }),
-        obstacle: new Material(new defs.Phong_Shader(),
-            {ambient: 0.4, diffusivity: 1, specularity: 0, color: hex_color("#0000FF"),
-            }),
+      obstacle: new Material(new Textured_Phong(), {
+        ambient: 1,
+        color: hex_color("#000000"),
+        texture: new Texture("assets/rock.jpg")
+      }),
       background: new Material(new Textured_Phong(), {
         color: hex_color("#000000"),
         ambient: 1,
-        texture: new Texture("assets/matrix.jpg")
+        texture: new Texture("assets/stars.jpg")
+      }),
+      wall: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"),
+        ambient: 1,
+        texture: new Texture("assets/metal.jpg")
       }),
     };
 
@@ -117,7 +130,7 @@ export class Assignment3 extends Scene {
 
     this.bot_wall = new Rectangular(
       this.shapes.cube,
-        this.materials.background,
+        this.materials.wall,
       vec3(0, -36, 0),
       1.2,
       30,
@@ -129,7 +142,7 @@ export class Assignment3 extends Scene {
 
     this.top_wall = new Rectangular(
       this.shapes.cube,
-        this.materials.background,
+        this.materials.wall,
       vec3(0, 36, 0),
       0.5,
         30,
@@ -141,7 +154,7 @@ export class Assignment3 extends Scene {
 
     this.left_wall = new Rectangular(
       this.shapes.cube,
-        this.materials.background,
+        this.materials.wall,
       vec3(-31, 0, 0),
       1,
       1,
@@ -153,7 +166,7 @@ export class Assignment3 extends Scene {
 
     this.right_wall = new Rectangular(
       this.shapes.cube,
-        this.materials.background,
+        this.materials.wall,
       vec3(31, 0, 0),
       1,
       1,
@@ -165,7 +178,7 @@ export class Assignment3 extends Scene {
 
     this.obstacle1 = new Rectangular(
       this.shapes.cube,
-        this.materials.background,
+        this.materials.obstacle,
       vec3(-10, 10, 0),
       1,
       3,
@@ -175,16 +188,16 @@ export class Assignment3 extends Scene {
       1
     );
 
-    this.obstacle2 = new Rectangular(this.shapes.cube, this.materials.background,
+    this.obstacle2 = new Rectangular(this.shapes.cube, this.materials.obstacle,
         vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1);
 
-      this.obstacle3 = new Rectangular(this.shapes.cube, this.materials.background,
+      this.obstacle3 = new Rectangular(this.shapes.cube, this.materials.obstacle,
           vec3(15, 15, 0), 1, 3, 1, 0, 60, 1);
 
-      this.obstacle4 = new Rectangular(this.shapes.cube, this.materials.background,
+      this.obstacle4 = new Rectangular(this.shapes.cube, this.materials.obstacle,
           vec3(10, 0, 0), 1, 3, 1, 0, -60, 1);
 
-      this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.background,
+      this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.obstacle,
           vec3(20, -10, 0), 1, 3, 1, 0, 50, 1);
 
     this.obstacles = [
@@ -275,7 +288,7 @@ export class Assignment3 extends Scene {
     // this.shapes.[XXX].draw([XXX]) // <--example
 
     // TODO: Lighting (Requirement 2)
-    const light_position = vec4(0, 5, 5, 1);
+    const light_position = vec4(0, 5, 100, 1);
     // The parameters of the Light are: position, color, size
     program_state.lights = [new Light(light_position, color(1, 1, 1, 1), 1000)];
 
