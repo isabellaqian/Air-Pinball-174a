@@ -55,6 +55,7 @@ export class Assignment3 extends Scene {
     this.initial_camera_location = Mat4.look_at(
       vec3(0, -60, 60), vec3(0, 0, 0), vec3(0, 1, 0)
     );
+
     this.PhysicsCalculations = new PhysicsCalculations();
     this.Ball = new Ball(
       this.shapes.sphere, this.materials.ball, vec3(0, 10, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this
@@ -67,11 +68,14 @@ export class Assignment3 extends Scene {
     this.background = new Rectangular(
       this.shapes.cube, this.materials.background, vec3(0, 0, 0), 1, 30, 35, -1, 0, 0.1
     );
-    this.bot_wall_left = new Rectangular(
-      this.shapes.cube, this.materials.test, vec3(-20, -21, 0), .5, 10, this.materials.wall, vec3(0, -36, 0), 1.2, 30, 1, 0, -30, 1
-    );
-    this.bot_wall_right = new Rectangular(
-        this.shapes.cube, this.materials.wall, vec3(20, -21, 0), .5, 10, 1, 0, 30, 1
+    // this.bot_wall_left = new Rectangular(
+    //   this.shapes.cube, this.materials.wall, vec3(-20, -21, 0), .5, 10, vec3(0, -36, 0), 1.2, 30, 1, 0, -30, 1
+    // );
+    // this.bot_wall_right = new Rectangular(
+    //     this.shapes.cube, this.materials.wall, vec3(20, -21, 0), .5, 10, 1, 0, 30, 1
+    // );
+    this.bot_wall = new Rectangular(
+        this.shapes.cube, this.materials.wall, vec3(0, -36, 0), 1, 30, 1, 0, 0, 1
     );
     this.top_wall = new Rectangular(
       this.shapes.cube, this.materials.wall, vec3(0, 36, 0), 0.5, 30, 1, 0, 0, 1
@@ -85,17 +89,17 @@ export class Assignment3 extends Scene {
     this.obstacle1 = new Rectangular(
       this.shapes.cube, this.materials.obstacle, vec3(-10, 10, 0), 1, 3, 1, 0, -30, 1
     );
-    this.obstacle2 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-        vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1
+    this.obstacle2 = new Rectangular(
+        this.shapes.cube, this.materials.obstacle, vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1
     );
-    this.obstacle3 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-        vec3(15, 15, 0), 1, 3, 1, 0, 60, 1
+    this.obstacle3 = new Rectangular(
+        this.shapes.cube, this.materials.obstacle, vec3(15, 15, 0), 1, 3, 1, 0, 60, 1
     );
-    this.obstacle4 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-        vec3(10, 0, 0), 1, 3, 1, 0, -60, 1
+    this.obstacle4 = new Rectangular(
+        this.shapes.cube, this.materials.obstacle, vec3(10, 0, 0), 1, 3, 1, 0, -60, 1
     );
-    this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-        vec3(20, -10, 0), 1, 3, 1, 0, 50, 1
+    this.obstacle5 = new Rectangular(
+        this.shapes.cube, this.materials.obstacle, vec3(20, -10, 0), 1, 3, 1, 0, 50, 1
     );
     this.scoreboard = new Scoreboard(vec3(45, 0, 0));
 
@@ -108,8 +112,9 @@ export class Assignment3 extends Scene {
     this.RightFlipper = new Flipper(this.shapes.cube, this.materials.obstacle, vec3(14,-25,0), this, false);
 
     this.obstacles = [
-       this.bot_wall_left,
-       this.bot_wall_right,
+       // this.bot_wall_left,
+       // this.bot_wall_right,
+       this.bot_wall,
        this.top_wall,
        this.left_wall,
        this.right_wall,
@@ -190,8 +195,9 @@ export class Assignment3 extends Scene {
     this.Ball.update_object(context, program_state);
     //this.circular_bouncer.render(context, program_state, model_transform);
     this.background.render(context, program_state);
-    this.bot_wall_left.render(context, program_state);
-    this.bot_wall_right.render(context, program_state);
+    // this.bot_wall_left.render(context, program_state);
+    // this.bot_wall_right.render(context, program_state);
+    this.bot_wall.render(context, program_state);
     this.top_wall.render(context, program_state);
     this.left_wall.render(context, program_state);
     this.right_wall.render(context, program_state);
