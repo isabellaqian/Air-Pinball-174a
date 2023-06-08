@@ -6,24 +6,7 @@ import { PhysicsCalculations } from "./new-scripts/physics-calculations.js";
 import { Debug_Point } from "./new-scripts/visual_debugger.js";
 import { Scoreboard} from "./new-scripts/scoreboard.js";
 
-const {
-  Vector,
-  Vector3,
-  vec,
-  vec3,
-  vec4,
-  color,
-  hex_color,
-  Shader,
-  Matrix,
-  Mat4,
-  Light,
-  Shape,
-  Material,
-  Scene,
-  Texture
-} = tiny;
-
+const {Vector, Vector3, vec, vec3, vec4, color, hex_color, Shader, Matrix, Mat4, Light, Shape, Material, Scene, Texture} = tiny;
 const {Textured_Phong} = defs
 
 export class Assignment3 extends Scene {
@@ -39,185 +22,82 @@ export class Assignment3 extends Scene {
       circle: new defs.Regular_2D_Polygon(1, 15),
       cube: new defs.Cube(),
       square: new defs.Square(),
-      // TODO:  Fill in as many additional shape instances as needed in this key/value table.
-      //        (Requirement 1)
     };
 
     // *** Materials
     this.materials = {
       test: new Material(new defs.Phong_Shader(), {
-        ambient: 0.4,
-        diffusivity: 0.5,
-        specularity: 0,
-        color: hex_color("#b3abff"),
+        ambient: 0.4, diffusivity: 0.5, specularity: 0, color: hex_color("#b3abff"),
       }),
-      ring: new Material(new Ring_Shader()),
-
-      // TODO:  Fill in as many additional material objects as needed in this key/value table.
-      //        (Requirement 4)
       /*ball: new Material(new defs.Phong_Shader(), {
-        ambient: 1,
-        diffusivity: 1,
-        specularity: 1,
-        color: hex_color("#888888"),
+        ambient: 1, diffusivity: 1, specularity: 1, color: hex_color("#888888"),
       }),*/
       ball: new Material(new Textured_Phong(), {
-        ambient: 1,
-        specularity: 1,
-        color: hex_color("#000000"),
-        texture: new Texture(("assets/fire.jpg"))
+        ambient: 1, specularity: 1, color: hex_color("#000000"), texture: new Texture(("assets/fire.jpg"))
       }),
       circular_bouncer: new Material(new Gouraud_Shader(), {
-        ambient: 0.4,
-        diffusivity: 1,
-        specularity: 0.5,
-        color: hex_color("#ff0000"),
+        ambient: 0.4, diffusivity: 1, specularity: 0.5, color: hex_color("#ff0000"),
       }),
       debug_material: new Material(new Gouraud_Shader(), {
-        ambient: 1,
-        diffusivity: 1,
-        color: hex_color("#ff0000"),
+        ambient: 1, diffusivity: 1, color: hex_color("#ff0000"),
       }),
       obstacle: new Material(new Textured_Phong(), {
-        ambient: 1,
-        color: hex_color("#000000"),
-        texture: new Texture("assets/rock.jpg")
+        ambient: 1, color: hex_color("#000000"), texture: new Texture("assets/rock.jpg")
       }),
       background: new Material(new Textured_Phong(), {
-        color: hex_color("#000000"),
-        ambient: 1,
-        texture: new Texture("assets/stars.jpg")
+        color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/stars.jpg")
       }),
       wall: new Material(new Textured_Phong(), {
-        color: hex_color("#000000"),
-        ambient: 1,
-        texture: new Texture("assets/metal.jpg")
+        color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/metal.jpg")
       }),
     };
 
     this.initial_camera_location = Mat4.look_at(
-      vec3(0, -60, 60),
-      vec3(0, 0, 0),
-      vec3(0, 1, 0)
+      vec3(0, -60, 60), vec3(0, 0, 0), vec3(0, 1, 0)
     );
     this.PhysicsCalculations = new PhysicsCalculations();
-
     this.Ball = new Ball(
-      this.shapes.sphere,
-      this.materials.ball,
-      vec3(0, 10, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this
+      this.shapes.sphere, this.materials.ball, vec3(0, 10, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this
       //vec3(0, 6, 0),
       //vec3(0, 0, 0),
-
     );
-
     this.circular_bouncer = new Cylindrical(
-      this.shapes.torus,
-      this.materials.circular_bouncer,
-      vec3(0, 0, 0),
-      1
+      this.shapes.torus, this.materials.circular_bouncer, vec3(0, 0, 0), 1
     );
-
     this.background = new Rectangular(
-      this.shapes.cube,
-      this.materials.background,
-      vec3(0, 0, 0),
-      1,
-        30,
-        35,
-      -1,
-      0,
-      0.1
+      this.shapes.cube, this.materials.background, vec3(0, 0, 0), 1, 30, 35, -1, 0, 0.1
     );
-
     this.bot_wall_left = new Rectangular(
-      this.shapes.cube,
-      this.materials.test,
-      vec3(-20, -21, 0),
-        .5,
-      10,
-        this.materials.wall,
-      vec3(0, -36, 0),
-      1.2,
-      30,
-      1,
-      0,
-      -30,
-      1
+      this.shapes.cube, this.materials.test, vec3(-20, -21, 0), .5, 10, this.materials.wall, vec3(0, -36, 0), 1.2, 30, 1, 0, -30, 1
     );
     this.bot_wall_right = new Rectangular(
-        this.shapes.cube,
-        this.materials.test,
-        vec3(20, -21, 0),
-        .5,
-        10,
-        1,
-        0,
-        30,
-        1
+        this.shapes.cube, this.materials.wall, vec3(20, -21, 0), .5, 10, 1, 0, 30, 1
     );
-
     this.top_wall = new Rectangular(
-      this.shapes.cube,
-        this.materials.wall,
-      vec3(0, 36, 0),
-      0.5,
-        30,
-      1,
-      0,
-      0,
-      1
+      this.shapes.cube, this.materials.wall, vec3(0, 36, 0), 0.5, 30, 1, 0, 0, 1
     );
-
     this.left_wall = new Rectangular(
-      this.shapes.cube,
-        this.materials.wall,
-      vec3(-31, 0, 0),
-      1,
-      1,
-      37,
-      0,
-      0,
-      1
+      this.shapes.cube, this.materials.wall, vec3(-31, 0, 0), 1, 1, 37, 0, 0, 1
     );
-
     this.right_wall = new Rectangular(
-      this.shapes.cube,
-        this.materials.wall,
-      vec3(31, 0, 0),
-      1,
-      1,
-      37,
-      0,
-      0,
-      1
+      this.shapes.cube, this.materials.wall, vec3(31, 0, 0), 1, 1, 37, 0, 0, 1
     );
-
     this.obstacle1 = new Rectangular(
-      this.shapes.cube,
-        this.materials.obstacle,
-      vec3(-10, 10, 0),
-      1,
-      3,
-      1,
-      0,
-      -30,
-      1
+      this.shapes.cube, this.materials.obstacle, vec3(-10, 10, 0), 1, 3, 1, 0, -30, 1
     );
-
     this.obstacle2 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-        vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1);
-
-      this.obstacle3 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-          vec3(15, 15, 0), 1, 3, 1, 0, 60, 1);
-
-      this.obstacle4 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-          vec3(10, 0, 0), 1, 3, 1, 0, -60, 1);
-
-      this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.obstacle,
-          vec3(20, -10, 0), 1, 3, 1, 0, 50, 1);
-
-      this.scoreboard = new Scoreboard(vec3(45, 0, 0));
+        vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1
+    );
+    this.obstacle3 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+        vec3(15, 15, 0), 1, 3, 1, 0, 60, 1
+    );
+    this.obstacle4 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+        vec3(10, 0, 0), 1, 3, 1, 0, -60, 1
+    );
+    this.obstacle5 = new Rectangular(this.shapes.cube, this.materials.obstacle,
+        vec3(20, -10, 0), 1, 3, 1, 0, 50, 1
+    );
+    this.scoreboard = new Scoreboard(vec3(45, 0, 0));
 
     this.LeftKeyDown = false;
     this.RightKeyDown = false;
@@ -233,11 +113,11 @@ export class Assignment3 extends Scene {
        this.top_wall,
        this.left_wall,
        this.right_wall,
-      // this.obstacle1,
-      // this.obstacle2,
-      // this.obstacle3,
-      // this.obstacle4,
-      // this.obstacle5,
+       this.obstacle1,
+       this.obstacle2,
+       this.obstacle3,
+       this.obstacle4,
+       this.obstacle5,
     ];
 
     this.flippers = [
@@ -303,47 +183,24 @@ export class Assignment3 extends Scene {
       1000
     );
 
-    // TODO: Create Planets (Requirement 1)
-    // this.shapes.[XXX].draw([XXX]) // <--example
-
-    // TODO: Lighting (Requirement 2)
     const light_position = vec4(0, 5, 100, 1);
     // The parameters of the Light are: position, color, size
     program_state.lights = [new Light(light_position, color(1, 1, 1, 1), 1000)];
 
-    // TODO:  Fill in matrix operations and drawing code to draw the solar system scene (Requirements 3 and 4)
-    const t = program_state.animation_time / 1000,
-      dt = program_state.animation_delta_time / 1000;
-    const yellow = hex_color("#fac91a");
-    let model_transform = Mat4.identity();
-
-    //this.shapes.torus.draw(context, program_state, model_transform, this.materials.test.override({color: yellow}));
-
     this.Ball.update_object(context, program_state);
     //this.circular_bouncer.render(context, program_state, model_transform);
-
     this.background.render(context, program_state);
-
     this.bot_wall_left.render(context, program_state);
     this.bot_wall_right.render(context, program_state);
     this.top_wall.render(context, program_state);
     this.left_wall.render(context, program_state);
     this.right_wall.render(context, program_state);
     this.obstacle1.render(context, program_state);
-      this.obstacle2.render(context, program_state);
-      this.obstacle3.render(context, program_state);
-      this.obstacle4.render(context, program_state);
-      this.obstacle5.render(context, program_state);
-
+    this.obstacle2.render(context, program_state);
+    this.obstacle3.render(context, program_state);
+    this.obstacle4.render(context, program_state);
+    this.obstacle5.render(context, program_state);
     this.scoreboard.render(context, program_state);
-
-    model_transform = model_transform.times(Mat4.translation(29, -19, 5));
-    this.shapes.circle.draw(
-      context,
-      program_state,
-      model_transform,
-      this.materials.test
-    );
 
     this.handle_flippers(context, program_state);
     const start = [0, 0];
