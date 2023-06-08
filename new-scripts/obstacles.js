@@ -74,6 +74,27 @@ export class Rectangular extends Obstacle {
     }
 }
 
+export class Rectangular1 extends Obstacle //i have no idea how the other Rectangular class works so im just trying again
+{
+    constructor(shape, material, position, bounciness, width, height, rotation) {
+        super(shape, material, position, bounciness);
+
+        this.width = width;
+        this.height = height;
+        this.rotation = rotation * Math.PI / 180;
+
+        let radius_offset = 1;
+
+        this.vertices.push(this.position[0] - width - radius_offset, this.position[1] + height + radius_offset, 0);
+    }
+
+    render(context, program_state) {
+        this.shape.draw(context, program_state, Mat4.identity().times(Mat4.translation(this.position[0],this.position[1], this.depth))
+            .times(Mat4.rotation(this.rotation,0,0,1))
+            .times(Mat4.scale(this.width, this.height, this.z_scale)), this.material);
+    }
+}
+
 export class Cylindrical extends Obstacle {
     constructor(shape, material, position, bounciness, radius) {
         super(shape, material, position, bounciness);
