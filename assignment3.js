@@ -96,7 +96,6 @@ export class Assignment3 extends Scene {
 
     this.initial_camera_location = Mat4.look_at(
       vec3(0, -60, 60),
-      vec3(0, -10, 95),
       vec3(0, 0, 0),
       vec3(0, 1, 0)
     );
@@ -231,11 +230,11 @@ export class Assignment3 extends Scene {
        this.top_wall,
        this.left_wall,
        this.right_wall,
-      // this.obstacle1,
-      // this.obstacle2,
-      // this.obstacle3,
-      // this.obstacle4,
-      // this.obstacle5,
+      this.obstacle1,
+      this.obstacle2,
+      this.obstacle3,
+      this.obstacle4,
+      this.obstacle5,
     ];
 
     this.flippers = [
@@ -332,7 +331,7 @@ export class Assignment3 extends Scene {
       this.obstacle3.render(context, program_state);
       this.obstacle4.render(context, program_state);
       this.obstacle5.render(context, program_state);
-      
+
     model_transform = model_transform.times(Mat4.translation(29, -19, 5));
     this.shapes.circle.draw(
       context,

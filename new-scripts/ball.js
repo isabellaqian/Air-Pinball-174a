@@ -104,7 +104,9 @@ export class Ball {
             this.velocity = this.PhysicsCalculations.normal_of_line_segment(flipper.triangleVertices[0], flipper.triangleVertices[2]);
             if (flipper.isLeft) {this.velocity = this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, 5);}
             else {this.velocity = this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, -5);}
-            //this.velocity +=
+            let tangentVelocityVector = this.PhysicsCalculations.projection(this.velocity, this.PhysicsCalculations.subtractVectors(flipper.triangleVertices[0], flipper.triangleVertices[2]));
+            this.velocity[0] += tangentVelocityVector[0];
+            this.velocity[1] += tangentVelocityVector[1];
             return;
         }
     }
