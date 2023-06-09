@@ -81,6 +81,8 @@ export class Ball {
             this.closestObstacle = null;
             this.closestColPoint = null;
             this.closestObstacleIndex = null;
+
+            this.scene.scoreboard.addToScore(obstacle.points);
         }
 
         for (let i = 0; i < this.scene.flippers.length; i++) {
@@ -147,7 +149,7 @@ export class Ball {
             this.velocity[0] += tangentVector[0];
             this.velocity[1] += tangentVector[1];
 
-            this.scene.scoreboard.incrementScore(15);
+            //this.scene.scoreboard.incrementScore(15);
             this.flipperCooldown = .2;
         }
     }
