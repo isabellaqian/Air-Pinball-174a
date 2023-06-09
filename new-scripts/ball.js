@@ -32,9 +32,6 @@ export class Ball {
         this.flipperCooldown = 0;
     }
 
-    get_random_float(min, max) {
-        return Math.random() * (max - min) + min;
-    }
     reset_object(context, program_state) {
         this.velocity = vec3(0, 0, 0)
         this.position = vec3(-29, -10, 0);
