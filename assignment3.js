@@ -233,8 +233,13 @@ export class Assignment3 extends Scene {
     this.obstacle5.render(context, program_state);
     this.scoreboard.render(context, program_state);
 
-    if (this.isPlaying) program_state.set_camera(this.play_camera_location);
-    else program_state.set_camera(this.start_camera_location);
+    if (this.isPlaying) {
+      //program_state.set_camera(this.play_camera_location);
+      program_state.camera_inverse = this.play_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
+    }
+    else {
+      program_state.camera_inverse = this.start_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
+    }
 
 
     this.handle_flippers(context, program_state);
