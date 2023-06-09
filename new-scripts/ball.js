@@ -16,13 +16,25 @@ export class Ball {
         this.bounciness = .95;
         this.scene = scene;
 
-        this.travel_segment_start = vec3(0, 0, 0);
-        this.travel_segment_end = vec3(0, 0, 0);
+        this.travel_segment_start = vec3(0, 10, 0);
+        this.travel_segment_end = vec3(0, 10, 0);
 
         this.dt = 0;
+        this.score = 0;
 
         this.debug_points = [];
         this.PhysicsCalculations = new PhysicsCalculations();
+    }
+
+    get_random_float(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    reset_object(context, program_state) {
+        this.velocity = vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0)
+        this.position = vec3(0, 10, 0);
+        this.dt = 0;
+        this.debug_points = [];
+        this.score = 0;
     }
 
     update_object(context, program_state) {
@@ -105,6 +117,7 @@ export class Ball {
             if (flipper.isLeft) {this.velocity = this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, 5);}
             else {this.velocity = this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, -5);}
             //this.velocity +=
+            this.score += 10;
             return;
         }
     }
@@ -126,6 +139,7 @@ export class Ball {
                 this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),obstacle.bounciness, collision_point);
                 this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), obstacle.vertices[i]));
                 this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), obstacle.vertices[second_vertex_index]));
+                this.score += 1;
                 return;
             }
         }

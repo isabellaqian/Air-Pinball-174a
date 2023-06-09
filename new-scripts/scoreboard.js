@@ -110,9 +110,15 @@ export class Scoreboard {
         this.right_wall_transform = model_transform.times(Mat4.translation(scale_factor * 7 + scale_factor/2, 0, 0)).times(Mat4.scale(scale_factor/2, 1, scale_factor));
     }
 
-    incrementScore() {
-        if (this.score < 9999)
-            this.score = this.score + 1;
+    addToScore(score) {
+        this.score += score;
+    }
+    resetScore() {
+        this.score = 0;
+    }
+
+    showScore(score) {
+        this.score = score;
     }
 
     render(context, program_state) {

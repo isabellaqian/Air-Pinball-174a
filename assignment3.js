@@ -237,11 +237,13 @@ export class Assignment3 extends Scene {
       //program_state.set_camera(this.play_camera_location);
       program_state.camera_inverse = this.play_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
       this.Ball.update_object(context, program_state);
+      this.scoreboard.showScore(this.Ball.score);
     }
     else {
+      this.Ball.reset_object(context, program_state);
+      this.scoreboard.resetScore();
       program_state.camera_inverse = this.start_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
     }
-
 
     this.handle_flippers(context, program_state);
     const start = [0, 0];
@@ -257,8 +259,6 @@ export class Assignment3 extends Scene {
     );
     //console.log("result,", res);
     this.debug_points = [];
-
-    this.scoreboard.incrementScore();
   }
 }
 
