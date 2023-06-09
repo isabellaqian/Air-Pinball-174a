@@ -14,7 +14,7 @@ export class Ball {
         this.position = position;
         this.velocity = velocity;
         this.gravity = -30; //-300
-        this.bounciness = .95;
+        this.bounciness = .97;
         this.scene = scene;
 
         this.travel_segment_start = vec3(0, 10, 0);
@@ -25,6 +25,10 @@ export class Ball {
 
         this.debug_points = [];
         this.PhysicsCalculations = new PhysicsCalculations();
+
+        this.closestObstacle = null;
+        this.closestColPoint = null;
+        this.closestObstacleIndex = null;
 
         this.flipperCooldown = 0;
     }
@@ -63,6 +67,22 @@ export class Ball {
         for (let i = 0; i < this.scene.obstacles.length; i++) {
             this.handle_obstacle_collision(this.scene.obstacles[i]);
         }
+
+        if (this.closestObstacle !== null) {
+
+            let second_vertex_index = this.closestObstacleIndex + 1;
+            if (second_vertex_index === this.closestObstacle.vertices.length) {
+                second_vertex_index = 0;
+            }
+
+            //this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),obstacle.bounciness, collision_point);
+            this.collide(this.PhysicsCalculations.normal_of_line_segment(this.closestObstacle.vertices[this.closestObstacleIndex], this.closestObstacle.vertices[second_vertex_index]), this.closestObstacle.bounciness, this.closestColPoint);
+
+            this.closestObstacle = null;
+            this.closestColPoint = null;
+            this.closestObstacleIndex = null;
+        }
+
         for (let i = 0; i < this.scene.flippers.length; i++) {
             this.handle_flipper_collision(this.scene.flippers[i]);
         }
@@ -117,7 +137,7 @@ export class Ball {
     handle_flipper_collision(flipper) {
         if (this.flipperCooldown <= 0 && this.PhysicsCalculations.isPointInTriangle(this.position, flipper.triangleVertices[0], flipper.triangleVertices[1], flipper.triangleVertices[2]))
         {
-            console.log("flipper collision");
+            //console.log("flipper collision");
 
             this.velocity = this.PhysicsCalculations.normal_of_line_segment(flipper.triangleVertices[0], flipper.triangleVertices[2]);
             if (flipper.isLeft) {this.velocity = this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, 5);}
@@ -146,13 +166,26 @@ export class Ball {
             collision_point = this.PhysicsCalculations.findIntersectionPoint1(this.travel_segment_start, this.travel_segment_end, obstacle.vertices[i], obstacle.vertices[second_vertex_index]);
 
             if (collision_point !== null) {
-                this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),obstacle.bounciness, collision_point);
-                this.add_debug_points(obstacle.vertices[i]);
-                this.add_debug_points(obstacle.vertices[second_vertex_index]);
-                this.scene.scoreboard.incrementScore(obstacle.points);
-                return;
+                //this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),obstacle.bounciness, collision_point);
+                // this.add_debug_points(obstacle.vertices[i]);
+                // this.add_debug_points(obstacle.vertices[second_vertex_index]);
+                //this.scene.scoreboard.incrementScore(obstacle.points);
+                if (this.closestObstacle == null ||
+                    this.PhysicsCalculations.sqr_magnitude(
+                    this.PhysicsCalculations.subtractVectors(this.travel_segment_start, collision_point))
+                    < this.PhysicsCalculations.sqr_magnitude(
+                        this.PhysicsCalculations.subtractVectors(this.travel_segment_start, this.closestColPoint)
+                    ))
+                {
+                    this.closestObstacle = obstacle;
+                    this.closestColPoint = collision_point;
+                    this.closestObstacleIndex = i;
+                }
+
+                //return true;
             }
         }
+        //return false;
     }
 
     handle_boundary_collision(width, height) {
