@@ -213,7 +213,7 @@ export class Assignment3 extends Scene {
     // The parameters of the Light are: position, color, size
     program_state.lights = [new Light(light_position, color(1, 1, 1, 1), 1000)];
 
-    this.Ball.update_object(context, program_state);
+
     //this.circular_bouncer.render(context, program_state, model_transform);
     this.background.render(context, program_state);
     this.bot_wall_left.render(context, program_state);
@@ -236,6 +236,7 @@ export class Assignment3 extends Scene {
     if (this.isPlaying) {
       //program_state.set_camera(this.play_camera_location);
       program_state.camera_inverse = this.play_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
+      this.Ball.update_object(context, program_state);
     }
     else {
       program_state.camera_inverse = this.start_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
