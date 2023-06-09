@@ -22,19 +22,13 @@ export class Obstacle {
 }
 
 export class Rectangular extends Obstacle {
-    constructor(shape, material, position, bounciness, width, height, depth, rotation, z_scale, points = 0, does_rotate = false) {
+    constructor(shape, material, position, bounciness, width, height, depth, rotation, z_scale, points = 0) {
         super(shape, material, position, bounciness, points);
         this.width = width;
         this.height = height;
         this.depth = depth;
         this.rotation = rotation * Math.PI / 180;
         this.z_scale = z_scale;
-        this.does_rotate = does_rotate;
-
-        /*let v1_prev = vec3(this.position[0] - width - 1, this.position[1] + height + 1, 0);
-        let v2_prev = vec3(this.position[0] + width + 1, this.position[1] + height + 1, 0);
-        let v3_prev = vec3(this.position[0] + width + 1, this.position[1] - height - 1, 0);
-        let v4_prev = vec3(this.position[0] - width - 1, this.position[1] - height - 1, 0);*/
 
         let v1_prev = vec4(-width - 1, height + 1, 0, 1);
         let v2_prev = vec4(width + 1, height + 1, 0, 1);
@@ -61,8 +55,6 @@ export class Rectangular extends Obstacle {
             //override color to red
             this.debug_points.push(new Debug_Point(this.material.override({color: colors[i]}), this.vertices[i]))
         }
-
-        console.log("rotated vertices: ", this.vertices);
     }
 
     render(context, program_state) {

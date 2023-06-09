@@ -21,7 +21,6 @@ export class Ball {
         this.travel_segment_end = vec3(0, 10, 0);
 
         this.dt = 0;
-        this.score = 0;
 
         this.debug_points = [];
         this.PhysicsCalculations = new PhysicsCalculations();
@@ -33,12 +32,9 @@ export class Ball {
         this.flipperCooldown = 0;
     }
 
-    get_random_float(min, max) {
-        return Math.random() * (max - min) + min;
-    }
     reset_object(context, program_state) {
-        this.velocity = vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0)
-        this.position = vec3(0, 10, 0);
+        this.velocity = vec3(0, 0, 0)
+        this.position = vec3(-29, -10, 0);
         this.dt = 0;
         this.debug_points = [];
     }

@@ -111,17 +111,13 @@ export class Scoreboard {
         this.left_wall_transform = model_transform.times(Mat4.translation(-scale_factor - scale_factor/2, 0, 0)).times(Mat4.scale(scale_factor/2, 1, scale_factor));
         this.right_wall_transform = model_transform.times(Mat4.translation(scale_factor * 7 + scale_factor/2, 0, 0)).times(Mat4.scale(scale_factor/2, 1, scale_factor));
     }
+    
     addToScore(score) {
         this.score += score;
     }
     resetScore() {
         this.score = 0;
         this.displayScore = 0;
-    }
-
-    showScore(score) {
-        this.score = score;
-        this.displayScore =  score;
     }
 
     render(context, program_state) {
