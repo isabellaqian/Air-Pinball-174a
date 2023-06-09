@@ -50,8 +50,8 @@ export class Assignment3 extends Scene {
       wall: new Material(new Textured_Phong(), {
         color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/metal.jpg")
       }),
-      headboard: new Material(new defs.Textured_Phong(), {
-        ambient: 1, specularity: 0, color: hex_color("#000000"), texture: new Texture("assets/tinypinball.png"),
+      headboard: new Material(new Textured_Phong(), {
+        ambient: 1, specularity: 0,  texture: new Texture("assets/tinypinball.png")
       }),
     };
 
@@ -60,7 +60,7 @@ export class Assignment3 extends Scene {
       vec3(0, -55, 15), vec3(0, 0, 10), vec3(0, 1, 0)
     );
     this.play_camera_location = Mat4.look_at(
-        vec3(0, -60, 60), vec3(0, -2, 0), vec3(0, 1, 0)
+        vec3(0, -60, 60), vec3(0, 0, 0), vec3(0, 1, 0)
     );
 
     this.PhysicsCalculations = new PhysicsCalculations();
@@ -76,10 +76,10 @@ export class Assignment3 extends Scene {
       this.shapes.cube, this.materials.background, vec3(0, 0, 0), 1, 30, 35, -1, 0, 0.1
     );
     this.bot_wall_left = new Rectangular(
-      this.shapes.cube, this.materials.wall, vec3(-18, -36, 0), .5, 12, 1, 0, 0, 1
+      this.shapes.cube, this.materials.wall, vec3(-18, -35, 0), 1, 12, 1, 0, 0, 1
     );
     this.bot_wall_right = new Rectangular(
-        this.shapes.cube, this.materials.wall, vec3(18, -36, 0), .5, 12, 1, 0, 0, 1
+        this.shapes.cube, this.materials.wall, vec3(18, -35, 0), 1, 12, 1, 0, 0, 1
     );
     // this.bot_wall = new Rectangular(
     //     this.shapes.cube, this.materials.wall, vec3(0, -36, 0), 1, 30, 1, 0, 0, 1
@@ -88,10 +88,10 @@ export class Assignment3 extends Scene {
       this.shapes.cube, this.materials.wall, vec3(0, 36, 0), 0.5, 30, 1, 0, 0, 1
     );
     this.left_wall = new Rectangular(
-      this.shapes.cube, this.materials.wall, vec3(-31, 0, 0), 1, 1, 37, 0, 0, 1
+      this.shapes.cube, this.materials.wall, vec3(-31, 0, 0), 1, 1, 36, 0, 0, 1
     );
     this.right_wall = new Rectangular(
-      this.shapes.cube, this.materials.wall, vec3(31, 0, 0), 1, 1, 37, 0, 0, 1
+      this.shapes.cube, this.materials.wall, vec3(31, 0, 0), 1, 1, 36, 0, 0, 1
     );
     this.headboard = new Rectangular(
       this.shapes.cube, this.materials.headboard, vec3(0, 38, 0), 1, 32, 1, 20, 0, 21
@@ -120,7 +120,8 @@ export class Assignment3 extends Scene {
     this.obstacle5 = new Rectangular(
         this.shapes.cube, this.materials.obstacle, vec3(20, -10, 0), 1, 3, 1, 0, 50, 1
     );
-    this.scoreboard = new Scoreboard(vec3(40, 0, 0));
+    this.scoreboard = new Scoreboard(vec3(40, 0, 0)
+    );
 
     this.LeftKeyDown = false;
     this.RightKeyDown = false;
