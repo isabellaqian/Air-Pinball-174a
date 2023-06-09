@@ -120,7 +120,7 @@ export class Assignment3 extends Scene {
     this.obstacle5 = new Rectangular(
         this.shapes.cube, this.materials.obstacle, vec3(20, -10, 0), 1, 3, 1, 0, 50, 1
     );
-    this.scoreboard = new Scoreboard(vec3(40, 0, 0)
+    this.scoreboard = new Scoreboard(vec3(-6, 37, 14)
     );
 
     this.LeftKeyDown = false;
