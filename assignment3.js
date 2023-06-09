@@ -126,22 +126,22 @@ export class Assignment3 extends Scene {
         this.shapes.cube, this.materials.wall, vec3(35, 36, 0), 1, 5, 1, 20,0, 21
     );
     this.jupiter = new Rectangular(
-      this.shapes.cube, this.materials.jupiter_target, vec3(-8, 0, 0), 1, 3, 3, 0, 45, 1, 20
+      this.shapes.cube, this.materials.jupiter_target, vec3(-8, 0, 0), 0.9, 3, 3, 0, 45, 1, 10
     );
     this.bottom_left_target = new Rectangular(
-        this.shapes.rock_object, this.materials.rock_target, vec3(-21, -8, 0), 1, 1, 8, 0, 30, 1, 10
+        this.shapes.rock_object, this.materials.rock_target, vec3(-21, -8, 0), 0.8, 1, 8, 0, 30, 1, 5
     );
     this.bottom_right_target = new Rectangular(
-        this.shapes.rock_object, this.materials.rock_target, vec3(21, -8, 0), 1, 1, 8, 0, -30, 1, 10
+        this.shapes.rock_object, this.materials.rock_target, vec3(21, -8, 0), 0.8, 1, 8, 0, -30, 1, 5
     );
     this.bottom_right_target.shape.arrays.texture_coord.forEach(
         (v, i, l) => v[1] = v[1] * 8
   )
     this.planet1 = new Rectangular(
-        this.shapes.cube, this.materials.planet_target, vec3(10, -15, 0), 1, 1.5, 1.5, 0, 20, 1, 40,
+        this.shapes.cube, this.materials.planet_target, vec3(10, -15, 0), 1, 1.5, 1.5, 0, 20, 1, 20,
     );
     this.planet2 = new Rectangular(
-        this.shapes.cube, this.materials.planet_target, vec3(-25, 15, 0), 1, 1.5, 1.5, 0, 60, 1, 40,
+        this.shapes.cube, this.materials.planet_target, vec3(-25, 15, 0), 1, 1.5, 1.5, 0, 60, 1, 20,
     );
     this.chute_left = new Rectangular(
         this.shapes.cube, this.materials.obstacle, vec3(14, 13.5, 0), 0.7, 1, 4.5, 0, -30, 1
@@ -153,31 +153,31 @@ export class Assignment3 extends Scene {
         this.shapes.cube, this.materials.obstacle, vec3(20, 17, 0), 0.7, 1, 4.5, 0, 60, 1
     );
     this.chute_target = new Rectangular(
-        this.shapes.cube, this.materials.gold_target, vec3(19, 15, 0), 1.3, 1, 2.2, 0, 60, 1, 100
+        this.shapes.cube, this.materials.gold_target, vec3(19, 15, 0), 1.5, 1, 2.2, 0, 60, 1, 100
     );
     this.top_target = new Rectangular(
-        this.shapes.cube, this.materials.gold_target, vec3(0, 34, 0), 1.3, 4, 1, 0, 0, 1, 100
+        this.shapes.cube, this.materials.gold_target, vec3(0, 34, 0), 1.5, 2, 1, 0, 0, 1, 100
     );
     this.top_target_left = new Rectangular(
-        this.shapes.cube, this.materials.obstacle, vec3(-5, 34, 0), 0.7, 1, 1, 0, 0, 1,
+        this.shapes.cube, this.materials.obstacle, vec3(-3, 34, 0), 0.7, 1, 1, 0, 0, 1,
     );
     this.top_target_right = new Rectangular(
-        this.shapes.cube, this.materials.obstacle, vec3(5, 34, 0), 0.7, 1, 1, 0, 0, 1,
+        this.shapes.cube, this.materials.obstacle, vec3(3, 34, 0), 0.7, 1, 1, 0, 0, 1,
     );
     this.corner_left_target = new Rectangular(
-        this.shapes.cube, this.materials.gold_target, vec3(-29, 34, 0), 1.3, 2, 1, -0.1, 45, 1, 100
+        this.shapes.cube, this.materials.gold_target, vec3(-29, 34, 0), 1.5, 2, 1, -0.1, 45, 1, 100
     );
     this.corner_right_target = new Rectangular(
-        this.shapes.cube, this.materials.gold_target, vec3(29, 34, 0), 1.3, 2, 1, -0.1, -45, 1, 100
+        this.shapes.cube, this.materials.gold_target, vec3(29, 34, 0), 1.5, 2, 1, -0.1, -45, 1, 100
     );
     this.neptune = new Rectangular(
-        this.shapes.cube, this.materials.neptune_target, vec3(-15, 25, 0), 1, 2, 2, 0, 60, 1, 30
+        this.shapes.cube, this.materials.neptune_target, vec3(-15, 25, 0), 1.2, 2, 2, 0, 60, 1, 40
     );
     this.mars = new Rectangular(
-        this.shapes.cube, this.materials.mars_target, vec3(5, 15, 0), 1, 1, 1, 0, 30, 1, 50
+        this.shapes.cube, this.materials.mars_target, vec3(5, 15, 0), 1.1, 1, 1, 0, 30, 1, 30
     );
     this.venus = new Rectangular(
-        this.shapes.cube, this.materials.venus_target, vec3(15, 27, 0), 1, 1.5, 1.5, 0, 15, 1, 60
+        this.shapes.cube, this.materials.venus_target, vec3(15, 27, 0), 1.3, 1.5, 1.5, 0, 15, 1, 50
     );
     this.scoreboard = new Scoreboard(vec3(-6, 37, 14)
     );
