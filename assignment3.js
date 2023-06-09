@@ -50,10 +50,17 @@ export class Assignment3 extends Scene {
       wall: new Material(new Textured_Phong(), {
         color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/metal.jpg")
       }),
+      headboard: new Material(new defs.Textured_Phong(), {
+        ambient: 1, specularity: 0, color: hex_color("#000000"), texture: new Texture("assets/tinypinball.png"),
+      }),
     };
 
-    this.initial_camera_location = Mat4.look_at(
-      vec3(0, -60, 60), vec3(0, 0, 0), vec3(0, 1, 0)
+    this.isPlaying = false;
+    this.start_camera_location = Mat4.look_at(
+      vec3(0, -55, 15), vec3(0, 0, 10), vec3(0, 1, 0)
+    );
+    this.play_camera_location = Mat4.look_at(
+        vec3(0, -60, 60), vec3(0, -5, 0), vec3(0, 1, 0)
     );
 
     this.PhysicsCalculations = new PhysicsCalculations();
@@ -86,6 +93,18 @@ export class Assignment3 extends Scene {
     this.right_wall = new Rectangular(
       this.shapes.cube, this.materials.wall, vec3(31, 0, 0), 1, 1, 37, 0, 0, 1
     );
+    this.headboard = new Rectangular(
+      this.shapes.cube, this.materials.headboard, vec3(0, 38, 0), 1, 32, 1, 20, 0, 21
+    );
+    this.top_bar = new Rectangular(
+      this.shapes.cube, this.materials.wall, vec3(0, 36, 2), 1, 30, 1, 39, 0, 2
+    );
+    this.right_ear = new Rectangular(
+        this.shapes.cube, this.materials.wall, vec3(-35, 36, 0), 1, 5, 1, 20,0, 21
+    );
+    this.left_ear = new Rectangular(
+        this.shapes.cube, this.materials.wall, vec3(35, 36, 0), 1, 5, 1, 20,0, 21
+    );
     this.obstacle1 = new Rectangular(
       this.shapes.cube, this.materials.obstacle, vec3(-10, 10, 0), 1, 3, 1, 0, -30, 1
     );
@@ -101,7 +120,7 @@ export class Assignment3 extends Scene {
     this.obstacle5 = new Rectangular(
         this.shapes.cube, this.materials.obstacle, vec3(20, -10, 0), 1, 3, 1, 0, 50, 1
     );
-    this.scoreboard = new Scoreboard(vec3(45, 0, 0));
+    this.scoreboard = new Scoreboard(vec3(40, 0, 0));
 
     this.LeftKeyDown = false;
     this.RightKeyDown = false;
@@ -134,9 +153,11 @@ export class Assignment3 extends Scene {
   }
 
   make_control_panel() {
-    // Draw the scene's buttons, setup their actions and keyboard shortcuts, and monitor live measurements.
-
-    //super.make_control_panel();
+    this.new_line();
+    this.key_triggered_button("Start", ["Enter"],
+        () => this.isPlaying = true);
+    this.key_triggered_button("Quit", ["Esc"],
+        () => this.isPlaying = false);
     this.new_line();
     this.key_triggered_button("Left Flipper", ["x"],
         () => this.LeftKeyDown = true, "#6E6460", () => this.LeftKeyDown = false);
@@ -177,8 +198,7 @@ export class Assignment3 extends Scene {
       this.children.push(
         (context.scratchpad.controls = new defs.Movement_Controls())
       );
-      // Define the global camera and projection matrices, which are stored in program_state.
-      program_state.set_camera(this.initial_camera_location);
+    program_state.set_camera(this.start_camera_location);
     }
 
     program_state.projection_transform = Mat4.perspective(
@@ -201,12 +221,20 @@ export class Assignment3 extends Scene {
     this.top_wall.render(context, program_state);
     this.left_wall.render(context, program_state);
     this.right_wall.render(context, program_state);
+    this.headboard.render(context, program_state);
+    this.top_bar.render(context, program_state);
+    this.right_ear.render(context, program_state);
+    this.left_ear.render(context, program_state);
     this.obstacle1.render(context, program_state);
     this.obstacle2.render(context, program_state);
     this.obstacle3.render(context, program_state);
     this.obstacle4.render(context, program_state);
     this.obstacle5.render(context, program_state);
     this.scoreboard.render(context, program_state);
+
+    if (this.isPlaying) program_state.set_camera(this.play_camera_location);
+    else program_state.set_camera(this.start_camera_location);
+
 
     this.handle_flippers(context, program_state);
     const start = [0, 0];
