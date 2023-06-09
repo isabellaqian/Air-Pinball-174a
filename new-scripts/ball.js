@@ -77,12 +77,11 @@ export class Ball {
 
             //this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),obstacle.bounciness, collision_point);
             this.collide(this.PhysicsCalculations.normal_of_line_segment(this.closestObstacle.vertices[this.closestObstacleIndex], this.closestObstacle.vertices[second_vertex_index]), this.closestObstacle.bounciness, this.closestColPoint);
+            this.scene.scoreboard.addToScore(this.closestObstacle.points);
 
             this.closestObstacle = null;
             this.closestColPoint = null;
             this.closestObstacleIndex = null;
-
-            this.scene.scoreboard.addToScore(obstacle.points);
         }
 
         for (let i = 0; i < this.scene.flippers.length; i++) {
