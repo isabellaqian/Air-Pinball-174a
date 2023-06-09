@@ -60,7 +60,7 @@ export class Assignment3 extends Scene {
       vec3(0, -55, 15), vec3(0, 0, 10), vec3(0, 1, 0)
     );
     this.play_camera_location = Mat4.look_at(
-        vec3(0, -60, 60), vec3(0, -5, 0), vec3(0, 1, 0)
+        vec3(0, -60, 60), vec3(0, -2, 0), vec3(0, 1, 0)
     );
 
     this.PhysicsCalculations = new PhysicsCalculations();
@@ -75,15 +75,15 @@ export class Assignment3 extends Scene {
     this.background = new Rectangular(
       this.shapes.cube, this.materials.background, vec3(0, 0, 0), 1, 30, 35, -1, 0, 0.1
     );
-    // this.bot_wall_left = new Rectangular(
-    //   this.shapes.cube, this.materials.wall, vec3(-20, -21, 0), .5, 10, vec3(0, -36, 0), 1.2, 30, 1, 0, -30, 1
-    // );
-    // this.bot_wall_right = new Rectangular(
-    //     this.shapes.cube, this.materials.wall, vec3(20, -21, 0), .5, 10, 1, 0, 30, 1
-    // );
-    this.bot_wall = new Rectangular(
-        this.shapes.cube, this.materials.wall, vec3(0, -36, 0), 1, 30, 1, 0, 0, 1
+    this.bot_wall_left = new Rectangular(
+      this.shapes.cube, this.materials.wall, vec3(-18, -36, 0), .5, 12, 1, 0, 0, 1
     );
+    this.bot_wall_right = new Rectangular(
+        this.shapes.cube, this.materials.wall, vec3(18, -36, 0), .5, 12, 1, 0, 0, 1
+    );
+    // this.bot_wall = new Rectangular(
+    //     this.shapes.cube, this.materials.wall, vec3(0, -36, 0), 1, 30, 1, 0, 0, 1
+    // );
     this.top_wall = new Rectangular(
       this.shapes.cube, this.materials.wall, vec3(0, 36, 0), 0.5, 30, 1, 0, 0, 1
     );
@@ -131,9 +131,9 @@ export class Assignment3 extends Scene {
     this.RightFlipper = new Flipper(this.shapes.cube, this.materials.obstacle, vec3(14,-25,0), this, false);
 
     this.obstacles = [
-       // this.bot_wall_left,
-       // this.bot_wall_right,
-       this.bot_wall,
+       this.bot_wall_left,
+       this.bot_wall_right,
+       // this.bot_wall,
        this.top_wall,
        this.left_wall,
        this.right_wall,
@@ -215,9 +215,9 @@ export class Assignment3 extends Scene {
     this.Ball.update_object(context, program_state);
     //this.circular_bouncer.render(context, program_state, model_transform);
     this.background.render(context, program_state);
-    // this.bot_wall_left.render(context, program_state);
-    // this.bot_wall_right.render(context, program_state);
-    this.bot_wall.render(context, program_state);
+    this.bot_wall_left.render(context, program_state);
+    this.bot_wall_right.render(context, program_state);
+    // this.bot_wall.render(context, program_state);
     this.top_wall.render(context, program_state);
     this.left_wall.render(context, program_state);
     this.right_wall.render(context, program_state);
