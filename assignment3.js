@@ -157,7 +157,7 @@ export class Assignment3 extends Scene {
     this.new_line();
     this.key_triggered_button("Start", ["Enter"],
         () => this.isPlaying = true);
-    this.key_triggered_button("Quit", ["Esc"],
+    this.key_triggered_button("Quit", ["q"],
         () => this.isPlaying = false);
     this.new_line();
     this.key_triggered_button("Left Flipper", ["x"],
@@ -238,6 +238,9 @@ export class Assignment3 extends Scene {
       program_state.camera_inverse = this.play_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
       this.Ball.update_object(context, program_state);
       this.scoreboard.showScore(this.Ball.score);
+      if (this.Ball.position[1] < -35) {
+        if (this.Ball.position[0] < 6 && this.Ball.position[0] > -6) this.isPlaying = false;
+      }
     }
     else {
       this.Ball.reset_object(context, program_state);

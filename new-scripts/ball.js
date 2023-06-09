@@ -53,7 +53,6 @@ export class Ball {
         this.travel_segment_start = this.position;
         this.position = this.PhysicsCalculations.addVectors(this.position, this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, this.dt));
         this.travel_segment_end = this.position;
-
         for (let i = 0; i < this.scene.obstacles.length; i++) {
             this.handle_obstacle_collision(this.scene.obstacles[i]);
         }
