@@ -99,15 +99,15 @@ export class Scoreboard {
         ]
 
         let model_transform = Mat4.identity().times(Mat4.translation(this.position[0], this.position[1], this.position[2]));
-        this.panel1_transform = model_transform.times(Mat4.translation(0, 0, 0)).times(Mat4.scale(scale_factor, scale_factor, 0.1));
-        this.panel2_transform = model_transform.times(Mat4.translation(scale_factor * 2, 0, 0)).times(Mat4.scale(scale_factor, scale_factor, 0.1));
-        this.panel3_transform = model_transform.times(Mat4.translation(scale_factor * 4, 0, 0)).times(Mat4.scale(scale_factor, scale_factor, 0.1));
-        this.panel4_transform = model_transform.times(Mat4.translation(scale_factor * 6, 0, 0)).times(Mat4.scale(scale_factor, scale_factor, 0.1));
+        this.panel1_transform = model_transform.times(Mat4.scale(scale_factor, 0.1, scale_factor));
+        this.panel2_transform = model_transform.times(Mat4.translation(scale_factor * 2, 0, 0)).times(Mat4.scale(scale_factor, 0.1, scale_factor));
+        this.panel3_transform = model_transform.times(Mat4.translation(scale_factor * 4, 0, 0)).times(Mat4.scale(scale_factor, 0.1, scale_factor));
+        this.panel4_transform = model_transform.times(Mat4.translation(scale_factor * 6, 0, 0)).times(Mat4.scale(scale_factor, 0.1, scale_factor));
 
-        this.top_wall_transform = model_transform.times(Mat4.translation(scale_factor * 3, scale_factor + scale_factor/2, 0)).times(Mat4.scale(scale_factor * 5, scale_factor/2, 1));
-        this.bot_wall_transform = model_transform.times(Mat4.translation(scale_factor * 3, -scale_factor - scale_factor/2, 0)).times(Mat4.scale(scale_factor * 5, scale_factor/2, 1));
-        this.left_wall_transform = model_transform.times(Mat4.translation(-scale_factor - scale_factor/2, 0, 0)).times(Mat4.scale(scale_factor/2, scale_factor, 1));
-        this.right_wall_transform = model_transform.times(Mat4.translation(scale_factor * 7 + scale_factor/2, 0, 0)).times(Mat4.scale(scale_factor/2, scale_factor, 1));
+        this.top_wall_transform = model_transform.times(Mat4.translation(scale_factor * 3, 0, scale_factor + scale_factor/2)).times(Mat4.scale(scale_factor * 5, 1, scale_factor/2));
+        this.bot_wall_transform = model_transform.times(Mat4.translation(scale_factor * 3, 0, -scale_factor - scale_factor/2)).times(Mat4.scale(scale_factor * 5, 1, scale_factor/2));
+        this.left_wall_transform = model_transform.times(Mat4.translation(-scale_factor - scale_factor/2, 0, 0)).times(Mat4.scale(scale_factor/2, 1, scale_factor));
+        this.right_wall_transform = model_transform.times(Mat4.translation(scale_factor * 7 + scale_factor/2, 0, 0)).times(Mat4.scale(scale_factor/2, 1, scale_factor));
     }
 
     incrementScore() {
