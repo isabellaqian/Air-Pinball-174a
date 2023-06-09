@@ -17,15 +17,27 @@ export class Ball {
         this.bounciness = .95;
         this.scene = scene;
 
-        this.travel_segment_start = vec3(0, 0, 0);
-        this.travel_segment_end = vec3(0, 0, 0);
+        this.travel_segment_start = vec3(0, 10, 0);
+        this.travel_segment_end = vec3(0, 10, 0);
 
         this.dt = 0;
+        this.score = 0;
 
         this.debug_points = [];
         this.PhysicsCalculations = new PhysicsCalculations();
 
         this.flipperCooldown = 0;
+    }
+
+    get_random_float(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    reset_object(context, program_state) {
+        this.velocity = vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0)
+        this.position = vec3(0, 10, 0);
+        this.dt = 0;
+        this.debug_points = [];
+        this.score = 0;
     }
 
     update_object(context, program_state) {
@@ -48,7 +60,6 @@ export class Ball {
         this.travel_segment_start = this.position;
         this.position = this.PhysicsCalculations.addVectors(this.position, this.PhysicsCalculations.multiplyVectorByScalar(this.velocity, this.dt));
         this.travel_segment_end = this.position;
-
         for (let i = 0; i < this.scene.obstacles.length; i++) {
             this.handle_obstacle_collision(this.scene.obstacles[i]);
         }

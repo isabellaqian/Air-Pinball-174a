@@ -147,7 +147,7 @@ export class Assignment3 extends Scene {
     this.obstacle5 = new Rectangular(
         this.shapes.cube, this.materials.obstacle, vec3(20, -10, 0), 1, 3, 1, 0, 50, 1
     );
-    this.scoreboard = new Scoreboard(vec3(40, 0, 0)
+    this.scoreboard = new Scoreboard(vec3(-6, 37, 14)
     );
 
     this.LeftKeyDown = false;
@@ -186,7 +186,7 @@ export class Assignment3 extends Scene {
     this.new_line();
     this.key_triggered_button("Start", ["Enter"],
         () => this.isPlaying = true);
-    this.key_triggered_button("Quit", ["Esc"],
+    this.key_triggered_button("Quit", ["q"],
         () => this.isPlaying = false);
     this.new_line();
     this.key_triggered_button("Left Flipper", ["x"],
@@ -242,7 +242,7 @@ export class Assignment3 extends Scene {
     // The parameters of the Light are: position, color, size
     program_state.lights = [new Light(light_position, color(1, 1, 1, 1), 1000)];
 
-    this.Ball.update_object(context, program_state);
+
     //this.circular_bouncer.render(context, program_state, model_transform);
     this.background.render(context, program_state);
     this.bot_wall_left.render(context, program_state);
@@ -262,9 +262,20 @@ export class Assignment3 extends Scene {
     this.obstacle5.render(context, program_state);
     this.scoreboard.render(context, program_state);
 
-    if (this.isPlaying) program_state.set_camera(this.play_camera_location);
-    else program_state.set_camera(this.start_camera_location);
-
+    if (this.isPlaying) {
+      //program_state.set_camera(this.play_camera_location);
+      program_state.camera_inverse = this.play_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
+      this.Ball.update_object(context, program_state);
+      this.scoreboard.showScore(this.Ball.score);
+      if (this.Ball.position[1] < -35) {
+        if (this.Ball.position[0] < 6 && this.Ball.position[0] > -6) this.isPlaying = false;
+      }
+    }
+    else {
+      this.Ball.reset_object(context, program_state);
+      this.scoreboard.resetScore();
+      program_state.camera_inverse = this.start_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
+    }
 
     this.handle_flippers(context, program_state);
     const start = [0, 0];
@@ -280,8 +291,6 @@ export class Assignment3 extends Scene {
     );
     //console.log("result,", res);
     this.debug_points = [];
-
-    //this.scoreboard.incrementScore();
   }
 }
 
