@@ -22,6 +22,7 @@ export class Assignment3 extends Scene {
       circle: new defs.Regular_2D_Polygon(1, 15),
       cube: new defs.Cube(),
       square: new defs.Square(),
+      rock_object: new defs.Cube(),
     };
 
     // *** Materials
@@ -42,7 +43,7 @@ export class Assignment3 extends Scene {
         ambient: 1, diffusivity: 1, color: hex_color("#ff0000"),
       }),
       obstacle: new Material(new Textured_Phong(), {
-        ambient: 1, color: hex_color("#000000"), texture: new Texture("assets/rock.jpg")
+        ambient: 1, color: hex_color("#000000"), texture: new Texture("assets/metal.jpg")
       }),
       background: new Material(new Textured_Phong(), {
         color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/stars.jpg")
@@ -53,6 +54,28 @@ export class Assignment3 extends Scene {
       headboard: new Material(new Textured_Phong(), {
         ambient: 1, specularity: 0,  texture: new Texture("assets/tinypinball.png")
       }),
+      gold_target: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/gold.jpg")
+      }),
+      jupiter_target: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/jupiter.jpg")
+      }),
+      planet_target: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/earth.gif")
+      }),
+      rock_target: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/rock.jpg")
+      }),
+      neptune_target: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/neptune.jpg")
+      }),
+      mars_target: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/mars.jpg")
+      }),
+      venus_target: new Material(new Textured_Phong(), {
+        color: hex_color("#000000"), ambient: 1, texture: new Texture("assets/venus.jpg")
+      }),
+
     };
 
     this.isPlaying = false;
@@ -76,49 +99,19 @@ export class Assignment3 extends Scene {
       this.shapes.cube, this.materials.background, vec3(0, 0, 0), 1, 30, 35, -1, 0, 0.1
     );
     this.bot_wall_left = new Rectangular(
-        this.shapes.cube,
-            this.materials.test,
-            vec3(-20, -21, 0),
-            1,
-            10,
-            1,
-            0,
-            -30,
-            1,
-            0
-  );
-      this.bot_wall_right = new Rectangular(
-          this.shapes.cube,
-          this.materials.test,
-          vec3(20, -21, 0),
-          1,
-          10,
-          1,
-          0,
-          30,
-          1,
-          0
-      );
-    // this.bot_wall = new Rectangular(
-    //     this.shapes.cube, this.materials.wall, vec3(0, -36, 0), 1, 30, 1, 0, 0, 1
-    // );
+        this.shapes.cube, this.materials.wall, vec3(-20, -21, 0), 0.7, 11, 1, 0, -30, 1,
+    );
+    this.bot_wall_right = new Rectangular(
+        this.shapes.cube, this.materials.wall, vec3(20, -21, 0), 0.7, 11, 1, 0, 30, 1,
+    );
     this.top_wall = new Rectangular(
-      this.shapes.cube,
-        this.materials.wall,
-      vec3(0, 36, 0),
-      0.5,
-        30,
-      1,
-      0,
-      0,
-      1,
-        0
+      this.shapes.cube, this.materials.wall, vec3(0, 36, 0), 0.7, 30, 1, 0, 0, 1,
     );
     this.left_wall = new Rectangular(
-      this.shapes.cube, this.materials.wall, vec3(-31, 0, 0), 1, 1, 36, 0, 0, 1
+      this.shapes.cube, this.materials.wall, vec3(-31, 0, 0), 0.7, 1, 36, 0, 0, 1
     );
     this.right_wall = new Rectangular(
-      this.shapes.cube, this.materials.wall, vec3(31, 0, 0), 1, 1, 36, 0, 0, 1
+      this.shapes.cube, this.materials.wall, vec3(31, 0, 0), 0.7, 1, 36, 0, 0, 1
     );
     this.headboard = new Rectangular(
       this.shapes.cube, this.materials.headboard, vec3(0, 38, 0), 1, 32, 1, 20, 0, 21
@@ -132,20 +125,59 @@ export class Assignment3 extends Scene {
     this.left_ear = new Rectangular(
         this.shapes.cube, this.materials.wall, vec3(35, 36, 0), 1, 5, 1, 20,0, 21
     );
-    this.obstacle1 = new Rectangular(
-      this.shapes.cube, this.materials.obstacle, vec3(-10, 10, 0), 1, 3, 1, 0, -30, 1
+    this.jupiter = new Rectangular(
+      this.shapes.cube, this.materials.jupiter_target, vec3(-8, 0, 0), 1, 3, 3, 0, 45, 1, 20
     );
-    this.obstacle2 = new Rectangular(
-        this.shapes.cube, this.materials.obstacle, vec3(-15, -15, 0), 1, 3, 1, 0, 30, 1
+    this.bottom_left_target = new Rectangular(
+        this.shapes.rock_object, this.materials.rock_target, vec3(-21, -8, 0), 1, 1, 8, 0, 30, 1, 10
     );
-    this.obstacle3 = new Rectangular(
-        this.shapes.cube, this.materials.obstacle, vec3(15, 15, 0), 1, 3, 1, 0, 60, 1
+    this.bottom_right_target = new Rectangular(
+        this.shapes.rock_object, this.materials.rock_target, vec3(21, -8, 0), 1, 1, 8, 0, -30, 1, 10
     );
-    this.obstacle4 = new Rectangular(
-        this.shapes.cube, this.materials.obstacle, vec3(10, 0, 0), 1, 3, 1, 0, -60, 1
+    this.bottom_right_target.shape.arrays.texture_coord.forEach(
+        (v, i, l) => v[1] = v[1] * 8
+  )
+    this.planet1 = new Rectangular(
+        this.shapes.cube, this.materials.planet_target, vec3(10, -15, 0), 1, 1.5, 1.5, 0, 20, 1, 40,
     );
-    this.obstacle5 = new Rectangular(
-        this.shapes.cube, this.materials.obstacle, vec3(20, -10, 0), 1, 3, 1, 0, 50, 1
+    this.planet2 = new Rectangular(
+        this.shapes.cube, this.materials.planet_target, vec3(-25, 15, 0), 1, 1.5, 1.5, 0, 60, 1, 40,
+    );
+    this.chute_left = new Rectangular(
+        this.shapes.cube, this.materials.obstacle, vec3(14, 13.5, 0), 0.7, 1, 4.5, 0, -30, 1
+    );
+    this.chute_right = new Rectangular(
+        this.shapes.cube, this.materials.obstacle, vec3(20, 10, 0), 0.7, 1, 4.5, 0, -30, 1
+    );
+    this.chute_top = new Rectangular(
+        this.shapes.cube, this.materials.obstacle, vec3(20, 17, 0), 0.7, 1, 4.5, 0, 60, 1
+    );
+    this.chute_target = new Rectangular(
+        this.shapes.cube, this.materials.gold_target, vec3(19, 15, 0), 1.3, 1, 2.2, 0, 60, 1, 100
+    );
+    this.top_target = new Rectangular(
+        this.shapes.cube, this.materials.gold_target, vec3(0, 34, 0), 1.3, 4, 1, 0, 0, 1, 100
+    );
+    this.top_target_left = new Rectangular(
+        this.shapes.cube, this.materials.obstacle, vec3(-5, 34, 0), 0.7, 1, 1, 0, 0, 1,
+    );
+    this.top_target_right = new Rectangular(
+        this.shapes.cube, this.materials.obstacle, vec3(5, 34, 0), 0.7, 1, 1, 0, 0, 1,
+    );
+    this.corner_left_target = new Rectangular(
+        this.shapes.cube, this.materials.gold_target, vec3(-29, 34, 0), 1.3, 2, 1, -0.1, 45, 1, 100
+    );
+    this.corner_right_target = new Rectangular(
+        this.shapes.cube, this.materials.gold_target, vec3(29, 34, 0), 1.3, 2, 1, -0.1, -45, 1, 100
+    );
+    this.neptune = new Rectangular(
+        this.shapes.cube, this.materials.neptune_target, vec3(-15, 25, 0), 1, 2, 2, 0, 60, 1, 30
+    );
+    this.mars = new Rectangular(
+        this.shapes.cube, this.materials.mars_target, vec3(5, 15, 0), 1, 1, 1, 0, 30, 1, 50
+    );
+    this.venus = new Rectangular(
+        this.shapes.cube, this.materials.venus_target, vec3(15, 27, 0), 1, 1.5, 1.5, 0, 15, 1, 60
     );
     this.scoreboard = new Scoreboard(vec3(-6, 37, 14)
     );
@@ -159,19 +191,33 @@ export class Assignment3 extends Scene {
     this.RightFlipper = new Flipper(this.shapes.cube, this.materials.obstacle, vec3(14,-25,0), this, false);
 
     this.obstacles = [
-       this.bot_wall_left,
-       this.bot_wall_right,
+
+        this.bot_wall_left,
+        this.bot_wall_right,
        // this.bot_wall,
-       this.top_wall,
-       this.left_wall,
-       this.right_wall,
-      this.obstacle1,
-      this.obstacle2,
-      this.obstacle3,
-      this.obstacle4,
-      this.obstacle5,
+        this.top_wall,
+        this.left_wall,
+        this.right_wall,
+        this.jupiter,
+        this.bottom_left_target,
+        this.bottom_right_target,
+        this.planet1,
+        this.planet2,
+        this.chute_left,
+        this.chute_top,
+        this.chute_right,
+        this.chute_target,
+        this.top_target,
+        this.top_target_left,
+        this.top_target_right,
+        this.corner_left_target,
+        this.corner_right_target,
+        this.neptune,
+        this.mars,
+        this.venus,
         this.LeftFlipper,
-        this.RightFlipper
+        this.RightFlipper,
+
     ];
 
     this.flippers = [
@@ -245,28 +291,18 @@ export class Assignment3 extends Scene {
 
     //this.circular_bouncer.render(context, program_state, model_transform);
     this.background.render(context, program_state);
-    this.bot_wall_left.render(context, program_state);
-    this.bot_wall_right.render(context, program_state);
-    // this.bot_wall.render(context, program_state);
-    this.top_wall.render(context, program_state);
-    this.left_wall.render(context, program_state);
-    this.right_wall.render(context, program_state);
     this.headboard.render(context, program_state);
     this.top_bar.render(context, program_state);
     this.right_ear.render(context, program_state);
     this.left_ear.render(context, program_state);
-    this.obstacle1.render(context, program_state);
-    this.obstacle2.render(context, program_state);
-    this.obstacle3.render(context, program_state);
-    this.obstacle4.render(context, program_state);
-    this.obstacle5.render(context, program_state);
     this.scoreboard.render(context, program_state);
 
+    for (let i = 0; i < this.obstacles.length; i++)
+      this.obstacles[i].render(context, program_state);
+
     if (this.isPlaying) {
-      //program_state.set_camera(this.play_camera_location);
       program_state.camera_inverse = this.play_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
       this.Ball.update_object(context, program_state);
-      this.scoreboard.showScore(this.Ball.score);
       if (this.Ball.position[1] < -35) {
         if (this.Ball.position[0] < 6 && this.Ball.position[0] > -6) this.isPlaying = false;
       }

@@ -127,7 +127,7 @@ export class Ball {
             this.velocity[0] += tangentVector[0];
             this.velocity[1] += tangentVector[1];
 
-            this.scene.scoreboard.incrementScore(15);
+            //this.scene.scoreboard.incrementScore(15);
             this.flipperCooldown = .2;
         }
     }
@@ -149,7 +149,7 @@ export class Ball {
                 this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),obstacle.bounciness, collision_point);
                 this.add_debug_points(obstacle.vertices[i]);
                 this.add_debug_points(obstacle.vertices[second_vertex_index]);
-                this.scene.scoreboard.incrementScore(obstacle.points);
+                this.scene.scoreboard.addToScore(obstacle.points);
                 return;
             }
         }
