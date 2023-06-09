@@ -13,7 +13,7 @@ export class Ball {
         this.debug_material = this.material.override({color: hex_color('#00ff0d')});
         this.position = position;
         this.velocity = velocity;
-        this.gravity = -30; //-300
+        this.gravity = -40; //-300
         this.bounciness = .97;
         this.scene = scene;
 
@@ -41,7 +41,6 @@ export class Ball {
         this.position = vec3(0, 10, 0);
         this.dt = 0;
         this.debug_points = [];
-        this.score = 0;
     }
 
     update_object(context, program_state) {
@@ -148,7 +147,7 @@ export class Ball {
             this.velocity[0] += tangentVector[0];
             this.velocity[1] += tangentVector[1];
 
-            //this.scene.scoreboard.incrementScore(15);
+            this.scene.scoreboard.addToScore(25);
             this.flipperCooldown = .2;
         }
     }

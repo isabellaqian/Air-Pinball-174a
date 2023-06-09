@@ -12,6 +12,8 @@ export class Scoreboard {
     constructor(position) {
         this.position = position;
         this.score = 0;
+        this.displayScore = 0;
+        this.timer = 0;
 
         this.shapes = {
             cube: new defs.Cube(),
@@ -109,27 +111,39 @@ export class Scoreboard {
         this.left_wall_transform = model_transform.times(Mat4.translation(-scale_factor - scale_factor/2, 0, 0)).times(Mat4.scale(scale_factor/2, 1, scale_factor));
         this.right_wall_transform = model_transform.times(Mat4.translation(scale_factor * 7 + scale_factor/2, 0, 0)).times(Mat4.scale(scale_factor/2, 1, scale_factor));
     }
-
-    incrementScore(amount = 1) {
-        this.score = this.score + amount;
-        if (this.score > 9999) { score = 9999; }
-    }
     addToScore(score) {
         this.score += score;
     }
     resetScore() {
         this.score = 0;
+        this.displayScore = 0;
     }
 
     showScore(score) {
         this.score = score;
+        this.displayScore =  score;
     }
 
     render(context, program_state) {
-        let digit1 = Math.floor(this.score / 1000);
-        let digit2 = Math.floor((this.score % 1000) / 100);
-        let digit3 = Math.floor((this.score % 100) / 10);
-        let digit4 = Math.floor(this.score % 10);
+
+        if (this.displayScore < this.score) {
+            if (this.timer > 0)
+            {
+                this.timer -= program_state.animation_delta_time / 1000;
+            } else{
+                if (this.score - this.displayScore > 100) {
+                    this.timer = .001;
+                } else{
+                    this.timer = .005;
+                }
+                this.displayScore += 1;
+            }
+        }
+
+        let digit1 = Math.floor(this.displayScore / 1000);
+        let digit2 = Math.floor((this.displayScore % 1000) / 100);
+        let digit3 = Math.floor((this.displayScore % 100) / 10);
+        let digit4 = Math.floor(this.displayScore % 10);
         this.panel1.draw(context, program_state, this.panel1_transform, this.numbers[digit1]);
         this.panel2.draw(context, program_state, this.panel2_transform, this.numbers[digit2]);
         this.panel3.draw(context, program_state, this.panel3_transform, this.numbers[digit3]);

@@ -36,7 +36,7 @@ export class Flipper extends Obstacle {
         this.triangleVertices = [];
 
         if (isLeft) {
-            this.vertices.push(vec4(this.position[0] + this.edgeLength * Math.cos(this.rotationRange), this.position[1] - this.edgeLength * Math.sin(this.rotationRange), 0, 1));
+            this.vertices.push(vec4(this.position[0] + this.edgeLength * Math.cos(this.rotationRange) + .9, this.position[1] - this.edgeLength * Math.sin(this.rotationRange) + 2, 0, 1));
             this.vertices.push(vec4(this.position[0], this.position[1], 0, 1));
 
             this.triangleVertices.push(vec4(this.position[0] + this.edgeLength * Math.cos(this.rotationRange), this.position[1] + this.edgeLength * Math.sin(this.rotationRange), 0, 1));
@@ -45,7 +45,7 @@ export class Flipper extends Obstacle {
 
             //this.vertices.push(vec4(this.position[0] + 6, this.position[1] - 2, 0, 1));
         } else {
-            this.vertices.push(vec4(this.position[0] - this.edgeLength * Math.cos(this.rotationRange), this.position[1] - this.edgeLength * Math.sin(this.rotationRange), 0, 1));
+            this.vertices.push(vec4(this.position[0] - this.edgeLength * Math.cos(this.rotationRange) - .9, this.position[1] - this.edgeLength * Math.sin(this.rotationRange) + 2, 0, 1));
             this.vertices.push(vec4(this.position[0], this.position[1], 0, 1));
 
             this.triangleVertices.push(vec4(this.position[0] - this.edgeLength * Math.cos(this.rotationRange), this.position[1] + this.edgeLength * Math.sin(this.rotationRange), 0, 1));

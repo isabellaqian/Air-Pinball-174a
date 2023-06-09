@@ -79,6 +79,7 @@ export class Assignment3 extends Scene {
     };
 
     this.isPlaying = false;
+    this.scoreReset = false;
     this.start_camera_location = Mat4.look_at(
       vec3(0, -55, 15), vec3(0, 0, 10), vec3(0, 1, 0)
     );
@@ -303,8 +304,13 @@ export class Assignment3 extends Scene {
     if (this.isPlaying) {
       program_state.camera_inverse = this.play_camera_location.map((x,i) => Vector.from(program_state.camera_inverse[i]).mix(x, 0.05));
       this.Ball.update_object(context, program_state);
-      if (this.Ball.position[1] < -35) {
-        if (this.Ball.position[0] < 6 && this.Ball.position[0] > -6) this.isPlaying = false;
+      if (this.Ball.position[1] < -40) {
+        this.isPlaying = false;
+        this.scoreReset = false;
+      }
+      if (!this.scoreReset){
+        //this.score = 0;
+        this.scoreReset = true;
       }
     }
     else {
