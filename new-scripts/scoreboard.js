@@ -111,9 +111,8 @@ export class Scoreboard {
     }
 
     incrementScore(amount = 1) {
-        if (this.score < 9999){
-            this.score = this.score + amount;
-        }
+        this.score = this.score + amount;
+        if (this.score > 9999) { score = 9999; }
     }
 
     render(context, program_state) {

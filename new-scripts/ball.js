@@ -10,6 +10,7 @@ export class Ball {
     constructor(shape, material, position, velocity, scene) {
         this.shape = shape;
         this.material = material;
+        this.debug_material = this.material.override({color: hex_color('#00ff0d')});
         this.position = position;
         this.velocity = velocity;
         this.gravity = -30; //-300
@@ -67,7 +68,7 @@ export class Ball {
         // this.dt = this.dt * (1 - travel_proportion);
 
         //this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#ff0000')}), this.travel_segment_start));
-        this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#ffb700')}), this.travel_segment_end));
+        //this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#ffb700')}), this.travel_segment_end));
 
         this.update_bounce_velocity(normal, bounciness);
 
@@ -135,8 +136,8 @@ export class Ball {
 
             if (collision_point !== null) {
                 this.collide(this.PhysicsCalculations.normal_of_line_segment(obstacle.vertices[i], obstacle.vertices[second_vertex_index]),obstacle.bounciness, collision_point);
-                this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), obstacle.vertices[i]));
-                this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), obstacle.vertices[second_vertex_index]));
+                this.add_debug_points(obstacle.vertices[i]);
+                this.add_debug_points(obstacle.vertices[second_vertex_index]);
                 this.scene.scoreboard.incrementScore(obstacle.points);
                 return;
             }
@@ -160,12 +161,18 @@ export class Ball {
         for (let i = 0; i < wall_points.length; i += 2)
         {
             collision_point = this.PhysicsCalculations.findIntersectionPoint(this.travel_segment_start, this.travel_segment_end, wall_points[i], wall_points[i + 1]);
-            this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), wall_points[i]));
-            this.debug_points.push(new Debug_Point(this.material.override({color: hex_color('#00ff0d')}), wall_points[i+1]));
+            this.add_debug_points(wall_points[i]);
+            this.add_debug_points(wall_points[i + 1]);
 
             if (collision_point !== null){
                 this.collide(this.PhysicsCalculations.normal_of_line_segment(wall_points[i], wall_points[i + 1]),1.02, collision_point);
             }
+        }
+    }
+
+    add_debug_points(position) {
+        if (this.debug_points.length < 10) {
+            //this.debug_points.push(new Debug_Point(this.debug_material, position, 1, this.debug_points));
         }
     }
 

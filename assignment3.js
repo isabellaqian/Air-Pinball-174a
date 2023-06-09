@@ -75,13 +75,30 @@ export class Assignment3 extends Scene {
     this.background = new Rectangular(
       this.shapes.cube, this.materials.background, vec3(0, 0, 0), 1, 30, 35, -1, 0, 0.1
     );
-
     this.bot_wall_left = new Rectangular(
-      this.shapes.cube, this.materials.wall, vec3(-18, -35, 0), 1, 12, 1, 0, 0, 1
-    );
-    this.bot_wall_right = new Rectangular(
-        this.shapes.cube, this.materials.wall, vec3(18, -35, 0), 1, 12, 1, 0, 0, 1
-    );
+        this.shapes.cube,
+            this.materials.test,
+            vec3(-20, -21, 0),
+            1,
+            10,
+            1,
+            0,
+            -30,
+            1,
+            0
+  );
+      this.bot_wall_right = new Rectangular(
+          this.shapes.cube,
+          this.materials.test,
+          vec3(20, -21, 0),
+          1,
+          10,
+          1,
+          0,
+          30,
+          1,
+          0
+      );
     // this.bot_wall = new Rectangular(
     //     this.shapes.cube, this.materials.wall, vec3(0, -36, 0), 1, 30, 1, 0, 0, 1
     // );
@@ -153,6 +170,8 @@ export class Assignment3 extends Scene {
       this.obstacle3,
       this.obstacle4,
       this.obstacle5,
+        this.LeftFlipper,
+        this.RightFlipper
     ];
 
     this.flippers = [
