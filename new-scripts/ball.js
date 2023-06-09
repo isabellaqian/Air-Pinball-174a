@@ -21,7 +21,6 @@ export class Ball {
         this.travel_segment_end = vec3(0, 10, 0);
 
         this.dt = 0;
-        this.score = 0;
 
         this.debug_points = [];
         this.PhysicsCalculations = new PhysicsCalculations();
@@ -41,7 +40,6 @@ export class Ball {
         this.position = vec3(-29, -10, 0);
         this.dt = 0;
         this.debug_points = [];
-        this.score = 0;
     }
 
     update_object(context, program_state) {

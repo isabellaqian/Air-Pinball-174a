@@ -30,14 +30,8 @@ export class Assignment3 extends Scene {
       test: new Material(new defs.Phong_Shader(), {
         ambient: 0.4, diffusivity: 0.5, specularity: 0, color: hex_color("#b3abff"),
       }),
-      /*ball: new Material(new defs.Phong_Shader(), {
-        ambient: 1, diffusivity: 1, specularity: 1, color: hex_color("#888888"),
-      }),*/
-      ball: new Material(new Textured_Phong(), {
+      fire: new Material(new Textured_Phong(), {
         ambient: 1, specularity: 1, color: hex_color("#000000"), texture: new Texture(("assets/fire.jpg"))
-      }),
-      circular_bouncer: new Material(new Gouraud_Shader(), {
-        ambient: 0.4, diffusivity: 1, specularity: 0.5, color: hex_color("#ff0000"),
       }),
       debug_material: new Material(new Gouraud_Shader(), {
         ambient: 1, diffusivity: 1, color: hex_color("#ff0000"),
@@ -88,12 +82,7 @@ export class Assignment3 extends Scene {
 
     this.PhysicsCalculations = new PhysicsCalculations();
     this.Ball = new Ball(
-      this.shapes.sphere, this.materials.ball, vec3(0, 10, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0),this
-      //vec3(0, 6, 0),
-      //vec3(0, 0, 0),
-    );
-    this.circular_bouncer = new Cylindrical(
-      this.shapes.torus, this.materials.circular_bouncer, vec3(0, 0, 0), 1
+      this.shapes.sphere, this.materials.fire, vec3(0, 10, 0), vec3(this.get_random_float(-20,20), this.get_random_float(-6,6), 0), this
     );
     this.background = new Rectangular(
       this.shapes.cube, this.materials.background, vec3(0, 0, 0), 1, 30, 35, -1, 0, 0.1
@@ -187,14 +176,12 @@ export class Assignment3 extends Scene {
     this.LeftKeyLast = false;
     this.RightKeyLast = false;
 
-    this.LeftFlipper = new Flipper(this.shapes.cube, this.materials.obstacle, vec3(-14,-25,0), this, true);
-    this.RightFlipper = new Flipper(this.shapes.cube, this.materials.obstacle, vec3(14,-25,0), this, false);
+    this.LeftFlipper = new Flipper(this.shapes.cube, this.materials.fire, vec3(-14,-25,0), this, true);
+    this.RightFlipper = new Flipper(this.shapes.cube, this.materials.fire, vec3(14,-25,0), this, false);
 
     this.obstacles = [
-
         this.bot_wall_left,
         this.bot_wall_right,
-       // this.bot_wall,
         this.top_wall,
         this.left_wall,
         this.right_wall,
@@ -217,7 +204,6 @@ export class Assignment3 extends Scene {
         this.venus,
         this.LeftFlipper,
         this.RightFlipper,
-
     ];
 
     this.flippers = [
@@ -314,18 +300,7 @@ export class Assignment3 extends Scene {
     }
 
     this.handle_flippers(context, program_state);
-    const start = [0, 0];
-    const end = [5, 0];
-    const circle_center = [4, 4];
-    const circle_radius = 2.9;
-    //console.log("starting");
-    let res = this.PhysicsCalculations.findCircleIntersectionPoint(
-      start,
-      end,
-      circle_center,
-      circle_radius
-    );
-    //console.log("result,", res);
+
     this.debug_points = [];
   }
 }
